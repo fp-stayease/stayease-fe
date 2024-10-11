@@ -72,7 +72,7 @@ const RoomDetailsComponent: React.FC<RoomDetailsProps> = ({ room }) => {
       bookingValues,
     );
     await router.push(
-      `/book?checkInDate=${bookingValues.checkInDate}&checkOutDate=${bookingValues.checkOutDate}&roomId=${room.roomId}`,
+      `/book?checkInDate=${bookingValues.checkInDate}&checkOutDate=${bookingValues.checkOutDate}&roomId=${room.roomId}&propertyId=${room.propertyId}`,
     );
   }, [room.roomId, bookingValues, router]);
 

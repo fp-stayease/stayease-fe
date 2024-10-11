@@ -1,6 +1,6 @@
-import TimePicker from "@/app/(user)/book/_components/TimePicker";
 import FormikCheckbox from "@/components/formik/FormikCheckBox";
 import FormikInput from "@/components/formik/FormikInput";
+import TimePicker from "@/app/(user)/book/_components/booking-form/special-request/TimePicker";
 
 const SpecialRequest = () => {
     return (

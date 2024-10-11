@@ -8,12 +8,14 @@ export const useRoomDetail = (propertyId: number, roomId: number) => {
     const {
         data,
         isLoading,
-        error
+        error,
+        refetch
     } = useQuery({
-        queryKey: ["get-room-detail"],
-        queryFn: async () => await propertyService.getRoomById(propertyId, roomId),
+        queryKey: ["get-room-detail", propertyId, roomId],
+        queryFn: () => propertyService.getRoomById(propertyId, roomId),
+        enabled: !!propertyId && !!roomId,
     });
 
     const room = data as RoomType;
-    return { room, isLoading, error }
-}
+    return { room, isLoading, error, refetch };
+};

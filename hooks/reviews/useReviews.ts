@@ -46,17 +46,19 @@ const usePropertyRating = (propertyId: number) => {
     const {
         data,
         isLoading,
-        error
+        error,
+        refetch
     } = useQuery({
         queryKey: ["get-property-rating", propertyId],
-        queryFn: async () => await reviewService.getPropertyRating(propertyId),
+        queryFn: () => reviewService.getPropertyRating(propertyId),
         enabled: !!propertyId
     });
 
     return {
-        propertyRating: data as unknown as PropertyRatingType,
+        propertyRating: data as PropertyRatingType,
         isLoading,
         error,
+        refetch
     };
 };
 

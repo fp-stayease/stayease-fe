@@ -1,7 +1,7 @@
 "use client";
 
-import BookingDateInfo from "@/app/(user)/book/_components/BookingDateInfo";
-import GuestInfo from "@/app/(user)/book/_components/GuestInfo";
+import BookingDateInfo from "@/app/(user)/book/_components/booking-form/stay-info/BookingDateInfo";
+import GuestInfo from "@/app/(user)/book/_components/booking-form/stay-info/GuestInfo";
 
 const UserStayingDataForm = () => {
     return (
