@@ -92,7 +92,7 @@ async function isPropertyOwner(session: any, path: any): Promise<boolean> {
 
 export const config = {
   matcher: [
-    "/((?!api|_next/static|_next/image|favicon.ico).*)",
+    "/((?!api|_next/static|_next/image|icon.ico).*)",
     "/login|/register|/register/verify|/dashboard",
   ],
 };
