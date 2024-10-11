@@ -22,8 +22,12 @@ export const useChangeEmail = () => {
     } catch (err: any) {
       handleError(
         err,
-        "Failed to send reset link. Please try again.",
+        "Failed to send email verification link. Please try again.",
         setError,
+      );
+      showAlert(
+        "error",
+        "Failed to send email verification link. Please try again.",
       );
       setError(err);
     } finally {
