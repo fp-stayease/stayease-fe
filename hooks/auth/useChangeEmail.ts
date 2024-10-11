@@ -40,8 +40,8 @@ export const useChangeEmail = () => {
     setError(null);
     try {
       await profileService.verifyEmailChange(token);
-      showAlert("success", "Email change successful");
-      await handleSignOut({ redirect: true });
+      showAlert("success", "Email change successful", "/login");
+      await handleSignOut({ redirect: false });
     } catch (err: any) {
       handleError(
         err,
