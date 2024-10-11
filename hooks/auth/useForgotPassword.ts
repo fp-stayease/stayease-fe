@@ -1,14 +1,15 @@
 import { useState } from "react";
 import { useAlert } from "@/context/AlertContext";
-import authService from "@/services/authService";
 import { ForgotPasswordValues } from "@/constants/Auth";
 import { passwordService } from "@/services/passwordService";
+import { useSignOut } from "./useSignOut";
 
 export const useForgotPassword = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isSuccess, setIsSuccess] = useState(false);
   const { showAlert } = useAlert();
+  const { handleSignOut } = useSignOut();
 
   const forgotPassword = async (email: string): Promise<any> => {
     setIsLoading(true);
@@ -45,9 +46,11 @@ export const useForgotPassword = () => {
         passwordValues,
       );
       setIsSuccess(true);
+
+      await handleSignOut({ redirect: false });
       showAlert(
         "success",
-        "Password reset successful! Please log in.",
+        "Password reset successful! Please log back in with your new credentials.",
         "/login",
       );
       return response;
