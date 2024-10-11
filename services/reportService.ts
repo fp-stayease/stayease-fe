@@ -86,5 +86,14 @@ export const reportService = {
             console.log(error);
             throw error;
         }
+    },
+    getTenantRatings: async (): Promise<number> => {
+        try {
+            const {data}  = await axiosInterceptor.get(config.endpoints.reports.tenantRatings);
+            return data.data;
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
     }
 }

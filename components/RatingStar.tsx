@@ -1,7 +1,7 @@
 import { FC } from "react";
 
 interface RatingStarProps {
-    rating: number;
+    rating: number | null | undefined;
 }
 
 const RatingStar: FC<RatingStarProps> = ({ rating }) => {
@@ -11,7 +11,7 @@ const RatingStar: FC<RatingStarProps> = ({ rating }) => {
                 <span
                     key={i}
                     style={{
-                        color: i < rating ? "#ffc107" : "#e4e5e9"
+                        color: rating &&i < rating ? "#ffc107" : "#e4e5e9"
                     }}
                     className='cursor-pointer text-2xl'
                 >

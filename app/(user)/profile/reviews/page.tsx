@@ -1,5 +1,6 @@
 import ReviewList from "@/app/(user)/profile/reviews/_components/ReviewList";
 
+export const dynamic = "force-dynamic";
 
 const UserReviewPage = () => {
     return (

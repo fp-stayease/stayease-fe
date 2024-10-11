@@ -4,5 +4,5 @@ export function calculateDaysBetweenDates(checkInDate: string, checkOutDate: str
     const checkIn = new Date(checkInDate);
     const checkOut = new Date(checkOutDate);
 
-    return differenceInDays(checkIn, checkOut);
+    return differenceInDays(checkOut, checkIn);
 }

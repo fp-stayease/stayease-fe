@@ -107,7 +107,7 @@ const BookingForm = () => {
           await handleBooking(value);
         }}
       >
-        {(formik) => (
+        {() => (
           <Form className="w-full flex flex-col gap-5">
             <UserStayingDataForm />
             <SpecialRequest />

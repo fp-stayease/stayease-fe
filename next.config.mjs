@@ -12,7 +12,6 @@ const nextConfig = {
         NEXTAUTH_URL: process.env.NEXTAUTH_URL,
     },
     images: {
-        domains: ['res.cloudinary.com', 'randomuser.me', 'ui-avatars.com', 'lh3.googleusercontent.com'],
         remotePatterns: [
             {
                 protocol: 'https',

@@ -4,7 +4,7 @@ import { usePropertyData } from "@/hooks/properties/usePropertyData";
 import ErrorComponent from "@/components/ErrorComponent";
 import PropertyForm from "../../../create/_components/property-forms/PropertyForm";
 import { usePropertyEdit } from "@/hooks/properties/usePropertyEdit";
-import { createPropValidationSchema } from "@/constants/ValidationSchema";
+import { createPropValidationSchema } from "@/constants/PropertyValidationSchema";
 import { useCategoryManagement } from "@/hooks/properties/useCategoryManagement";
 
 interface PropertyEditProps {

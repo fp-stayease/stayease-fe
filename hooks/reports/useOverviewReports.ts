@@ -58,7 +58,24 @@ const useRecentTrx = () => {
         recentTrx: data,
         recentTrxIsLoading: isLoading,
         recentTrxError: error
-    }
+    };
 };
 
-export { useOverviewSummary, useMonthlySales, useRecentTrx };
+const useTenantRatings = () => {
+    const {
+        data,
+        isLoading,
+        error
+    } = useQuery({
+        queryKey: ["get-tenant-ratings"],
+        queryFn: async () => await reportService.getTenantRatings()
+    });
+
+    return {
+        rating: data,
+        isLoading,
+        error
+    }
+}
+
+export { useOverviewSummary, useMonthlySales, useRecentTrx, useTenantRatings };

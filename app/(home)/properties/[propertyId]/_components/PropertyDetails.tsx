@@ -16,6 +16,7 @@ import PropertyHeader from "@/app/(home)/properties/[propertyId]/_components/Pro
 import { useDateSelection } from "@/hooks/utils/useDateSelection";
 import MapComponent from "@/components/MapComponent";
 import { useSearchParams } from "next/navigation";
+import ReviewTabsContent from "@/app/(home)/properties/[propertyId]/_components/ReviewTabsContent";
 
 interface PropertyDetailsProps {
   currentProperty: CurrentAvailablePropertyType;
@@ -58,6 +59,7 @@ const PropertyDetails: React.FC<PropertyDetailsProps> = ({
             <TabsList>
               <TabsTrigger value="description">Description</TabsTrigger>
               <TabsTrigger value="facilities">Info</TabsTrigger>
+              <TabsTrigger value="reviews">Reviews</TabsTrigger>
             </TabsList>
             <TabsContent value="description">
               <p>{currentProperty?.description}</p>
@@ -79,6 +81,9 @@ const PropertyDetails: React.FC<PropertyDetailsProps> = ({
                   Leased by: {currentProperty?.tenant}
                 </li>
               </ul>
+            </TabsContent>
+            <TabsContent value="reviews">
+              <ReviewTabsContent propertyId={currentProperty.id} />
             </TabsContent>
           </Tabs>
 

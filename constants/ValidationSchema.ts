@@ -70,40 +70,6 @@ export const userTypeSelectSchema = yup.object().shape({
   taxId: yup.string().nullable(),
 });
 
-// Property related schemas
-export const createPropValidationSchema = yup.object().shape({
-  property: yup.object().shape({
-    name: yup.string().required("Required"),
-    description: yup.string().required("Required"),
-    imageUrl: yup.string().required("Required"),
-    address: yup.string().required("Required"),
-    city: yup.string().required("Required"),
-    country: yup
-      .string()
-      .oneOf(["Indonesia"], "Must be in Indonesia")
-      .required("Required"),
-    longitude: yup.number().required("Required"),
-    latitude: yup.number().required("Required"),
-    categoryId: yup.string().required("Required"),
-  }),
-  rooms: yup.array().of(
-    yup.object().shape({
-      name: yup.string().required("Required"),
-      description: yup.string().required("Required"),
-      basePrice: yup.number().required("Required").positive("Must be positive"),
-      capacity: yup
-        .number()
-        .required("Required")
-        .positive("Must be positive")
-        .integer("Must be an integer"),
-      imageUrl: yup.string().required("Required"),
-    }),
-  ),
-  category: yup.object().shape({
-    name: yup.string(),
-  }),
-});
-
 // Contact form schema
 export const contactFormValidationSchema = yup.object().shape({
   fullName: yup
@@ -118,63 +84,6 @@ export const contactFormValidationSchema = yup.object().shape({
     .min(255, "Message must be at least 25 characters")
     .max(1000, "Message must not exceed 1000 characters"),
 });
-
-export const autoRateSettingValidationSchema = yup
-  .object()
-  .shape({
-    useAutoRates: yup.boolean(),
-    holidayAdjustmentRate: yup
-      .number()
-      .nullable()
-      .when("useAutoRates", {
-        is: true,
-        then: (schema) => schema.min(0, "Must be a positive number or empty"),
-        otherwise: (schema) => schema.strip(),
-      }),
-    holidayAdjustmentType: yup
-      .string()
-      .nullable()
-      .when("holidayAdjustmentRate", {
-        is: (val: number | null) => val !== null && val > 0,
-        then: (schema) =>
-          schema.required(
-            "Holiday adjustment rate type is required when rate is set",
-          ),
-        otherwise: (schema) => schema.nullable(),
-      }),
-    longWeekendAdjustmentRate: yup
-      .number()
-      .nullable()
-      .when("useAutoRates", {
-        is: true,
-        then: (schema) => schema.min(0, "Must be a positive number or empty"),
-        otherwise: (schema) => schema.strip(),
-      }),
-    longWeekendAdjustmentType: yup
-      .string()
-      .nullable()
-      .when("longWeekendAdjustmentRate", {
-        is: (val: number | null) => val !== null && val > 0,
-        then: (schema) =>
-          schema.required(
-            "Long weekend adjustment rate type is required when rate is set",
-          ),
-        otherwise: (schema) => schema.nullable(),
-      }),
-  })
-  .test(
-    "at-least-one-rate",
-    "At least one of Holiday or Long Weekend rate must be set when auto rate is enabled",
-    function (values) {
-      if (values.useAutoRates) {
-        return (
-          (values.holidayAdjustmentRate ?? 0) > 0 ||
-          (values.longWeekendAdjustmentRate ?? 0) > 0
-        );
-      }
-      return true;
-    },
-  );
 
 // Helper function to get validation schema based on form type
 export const getValidationSchema = (formType: FormType) => {

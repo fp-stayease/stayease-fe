@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { createPropValidationSchema } from "@/constants/ValidationSchema";
+import { createPropValidationSchema } from "@/constants/PropertyValidationSchema";
 import { createPropertyInitialValues } from "@/constants/PropertyInitialValues";
 import GlobalLoading from "@/components/GlobalLoading";
 import ErrorComponent from "@/components/ErrorComponent";
