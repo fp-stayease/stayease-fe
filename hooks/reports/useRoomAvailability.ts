@@ -6,6 +6,7 @@ import { availabilityService } from "@/services/availabilityService";
 import { useQueryClient } from "@tanstack/react-query";
 
 export const useRoomAvailability = () => {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const { showAlert } = useAlert();
   const queryClient = useQueryClient();
@@ -23,6 +24,8 @@ export const useRoomAvailability = () => {
     startDate: Date,
     endDate: Date,
   ) => {
+    setIsLoading(true);
+    setError(null);
     try {
       await availabilityService.setAvailability(roomId, { startDate, endDate });
       await availabilityService.getTenantRoomAvailability();
@@ -32,13 +35,19 @@ export const useRoomAvailability = () => {
         "Availability set successfully",
         "/dashboard/room-availability",
       );
+      return true;
     } catch (err: any) {
       setError("Failed to set availability: " + err.message);
       showAlert("error", "Failed to set availability: " + err.message);
+      return false;
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const removeAvailability = async (roomId: number, availabilityId: number) => {
+    setIsLoading(true);
+    setError(null);
     try {
       await availabilityService.removeAvailability(roomId, availabilityId);
       await availabilityService.getTenantRoomAvailability();
@@ -51,14 +60,23 @@ export const useRoomAvailability = () => {
     } catch (err: any) {
       setError("Failed to remove availability: " + err.message);
       showAlert("error", "Failed to remove availability: " + err.message);
+    } finally {
+      setIsLoading(false);
     }
+  };
+
+  const clearError = () => {
+    setError(null);
   };
 
   return {
     availabilityData,
-    isLoading: dataLoading,
-    error: error || dataError,
+    dataLoading,
+    isLoading,
+    dataError,
+    error,
     setAvailability,
     removeAvailability,
+    clearError,
   };
 };

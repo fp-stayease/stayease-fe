@@ -3,6 +3,7 @@ import {
   BookOpenText,
   Calendar,
   ChartLine,
+  Home,
   LayoutGrid,
   LibraryBig,
   LucideIcon,
@@ -59,6 +60,47 @@ export const userMenuRoutes: SidebarRoutesType[] = [
   { label: "My Bookings", href: "/profile/bookings", icon: BookOpenText },
   { label: "My Reviews", href: "/profile/reviews", icon: Star },
   { label: "Settings", href: "/profile/settings", icon: Settings },
+];
+
+export const userDashboardActions = [
+  {
+    icon: Home,
+    label: "Find a Place to Stay",
+    href: "/properties",
+  },
+  {
+    icon: BookOpenText,
+    label: "My Bookings",
+    href: "/profile/bookings",
+  },
+  {
+    icon: Star,
+    label: "My Reviews",
+    href: "/profile/reviews",
+  },
+];
+
+export const tenantDashboardActions = [
+  {
+    icon: Sofa,
+    label: "My Properties",
+    href: "/dashboard/properties",
+  },
+  {
+    icon: Calendar,
+    label: "Availability Calendar",
+    href: "/dashboard/room-availability",
+  },
+  {
+    icon: LibraryBig,
+    label: "Booking Requests",
+    href: "/dashboard/booking-request",
+  },
+  {
+    icon: ChartLine,
+    label: "Financial Reports",
+    href: "/dashboard/reports",
+  },
 ];
 
 export const footerNavigationItems = [

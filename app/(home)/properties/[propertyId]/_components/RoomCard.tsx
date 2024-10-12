@@ -30,6 +30,7 @@ const RoomCard: React.FC<RoomCardProps> = ({ room, isAvailable }) => {
               src={`${room.imageUrl ? room.imageUrl : "/images/room-placeholder.jpg"}`}
               alt={room.roomName}
               fill
+              sizes="100%"
               className={`w-full h-48 md:h-full object-cover ${!isAvailable ? "grayscale" : ""}`}
             />
           </div>

@@ -51,7 +51,8 @@ const PropertyListingCard: React.FC<PropertyCardProps> = ({
             src={imageUrl}
             alt={`${propertyName}`}
             fill
-            objectFit="cover"
+            sizes="100%"
+            className="object-cover"
           />
         </div>
         <CardContent className="p-4 flex flex-col justify-between flex-grow">
