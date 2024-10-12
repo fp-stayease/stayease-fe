@@ -22,6 +22,7 @@ interface ManualRateFormProps {
   isLoading: boolean;
   isEditing: boolean;
   selectedPropertyId: number | null;
+  error: string | null;
 }
 export const ManualRateForm: React.FC<ManualRateFormProps> = ({
   onSubmit,
@@ -29,6 +30,7 @@ export const ManualRateForm: React.FC<ManualRateFormProps> = ({
   isLoading,
   isEditing,
   selectedPropertyId,
+  error,
 }) => {
   const [isStartDateOpen, setIsStartDateOpen] = useState(false);
   const [isEndDateOpen, setIsEndDateOpen] = useState(false);
@@ -211,6 +213,7 @@ export const ManualRateForm: React.FC<ManualRateFormProps> = ({
               className="text-red-500 text-sm"
             />
           </div>
+          {error && <p className="text-left text-red-600 text-sm">{error}</p>}
           {isLoading || isSubmitting ? (
             <div className="flex justify-end">
               <LoadingButton title="Setting new rate..." />
@@ -219,7 +222,7 @@ export const ManualRateForm: React.FC<ManualRateFormProps> = ({
             <Button
               type="submit"
               className="w-full bg-blue-950 text-appgray hover:bg-appgray hover:text-blue-950 mt-5"
-              disabled={!selectedPropertyId}
+              disabled={!selectedPropertyId || isSubmitting}
             >
               {initialData ? "Update Rate" : "Set Rate"}
             </Button>

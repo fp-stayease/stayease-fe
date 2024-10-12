@@ -29,9 +29,7 @@ export const RatesManagement: React.FC<RatesManagementProps> = ({
     handleManualSubmit,
     handleAutoSubmit,
   } = useRatesManagement(
-    () => {
-      onClose();
-    },
+    onClose,
     isEditing ? selectedRate?.propertySummary.propertyId : undefined,
   );
 
@@ -58,7 +56,6 @@ export const RatesManagement: React.FC<RatesManagementProps> = ({
               value={selectedPropertyId?.toString()}
               disabled={isEditing}
             />
-            {error && <p className="text-left text-red-600 text-sm">{error}</p>}
           </div>
           <Tabs defaultValue="manual">
             <TabsList>
@@ -84,6 +81,7 @@ export const RatesManagement: React.FC<RatesManagementProps> = ({
                 isLoading={isLoading}
                 isEditing={isEditing}
                 selectedPropertyId={selectedPropertyId}
+                error={error}
               />
             </TabsContent>
             <TabsContent value="auto">
@@ -93,6 +91,7 @@ export const RatesManagement: React.FC<RatesManagementProps> = ({
                 initialData={autoRateSetting || undefined}
                 propertyId={selectedPropertyId ?? 0}
                 isLoading={isLoading}
+                error={error}
               />
             </TabsContent>
           </Tabs>

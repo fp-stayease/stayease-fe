@@ -21,6 +21,7 @@ interface AutomaticRateFormProps {
   initialData?: AutoRateResponseType;
   propertyId: number;
   isLoading: boolean;
+  error: string | null;
 }
 
 export const AutomaticRateForm: React.FC<AutomaticRateFormProps> = ({
@@ -29,6 +30,7 @@ export const AutomaticRateForm: React.FC<AutomaticRateFormProps> = ({
   initialData,
   propertyId,
   isLoading,
+  error,
 }) => {
   const [formValues, setFormValues] = useState<AutoRateRequestType | null>(
     null,
@@ -156,6 +158,7 @@ export const AutomaticRateForm: React.FC<AutomaticRateFormProps> = ({
                 </div>
               </div>
             )}
+            {error && <p className="text-left text-red-600 text-sm">{error}</p>}
             {initialData && !values.useAutoRates ? (
               <RateDeleteDialog
                 propertyId={propertyId}
