@@ -98,11 +98,7 @@ const BookingForm: FC<BookingFormProps> = ({checkInDate, checkOutDate, roomId, p
                 bookingValues.roomId!,
             );
 
-            router.push(
-                value.paymentMethod == "manual_transfer"
-                    ? `/payment?id=${data.bookingId}&bank=atm`
-                    : `/payment?id=${data.bookingId}&bank=${value?.bank}`,
-            );
+            router.push(`/payment?id=${data.bookingId}`);
         } catch (error) {
             console.log(error);
         }
