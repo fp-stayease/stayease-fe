@@ -7,7 +7,7 @@ import GlobalLoading from "@/components/GlobalLoading";
 import ErrorComponent from "@/components/ErrorComponent";
 
 const RatesTableSummary = () => {
-  const { rates, isLoading, error } = usePeakSeasonRate();
+  const { rates, isLoading, rateError } = usePeakSeasonRate();
   const [manualRates, setManualRates] = useState<RateResponseType[]>([]);
   const [automaticRates, setAutomaticRates] = useState<RateResponseType[]>([]);
 
@@ -29,8 +29,13 @@ const RatesTableSummary = () => {
     );
   }
 
-  if (error) {
-    return <ErrorComponent message={error} fullPage />;
+  if (rateError) {
+    return (
+      <ErrorComponent
+        message={rateError.message || "Error displaying rates"}
+        fullPage
+      />
+    );
   }
 
   return (

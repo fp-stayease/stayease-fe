@@ -3,7 +3,6 @@ import { ErrorMessage, Field, FieldProps, Form, Formik } from "formik";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { formatDate } from "@/utils/dateFormatter";
-import * as yup from "yup";
 import CustomSelect from "@/components/CustomSelect";
 import { usePropertyData } from "@/hooks/properties/usePropertyData";
 import { CustomDatePicker } from "@/components/CustomDatePicker";
@@ -91,7 +90,7 @@ const AvailabilityForm: React.FC<AvailabilityFormProps> = ({
       }}
       enableReinitialize
     >
-      {({ errors, touched, values, setFieldValue }) => (
+      {({ values, setFieldValue }) => (
         <Form className="space-y-4">
           <div>
             <Label htmlFor="propertyId">Property</Label>

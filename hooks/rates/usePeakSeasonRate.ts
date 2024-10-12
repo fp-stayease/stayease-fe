@@ -23,75 +23,78 @@ export const usePeakSeasonRate = () => {
     () => rateService.getTenantRates(),
   );
 
-  const createRate = useCallback(
-    async (propertyId: number, rateData: RateRequestType) => {
+  const handleRateOperation = useCallback(
+    async (
+      operation: () => Promise<void>,
+      successMessage: string,
+      errorMessage: string,
+    ) => {
       setIsLoading(true);
       setError(null);
       try {
-        logger.info("Creating rate for property: " + propertyId);
-        const response = await rateService.setRate(propertyId, rateData);
+        await operation();
         await queryClient.invalidateQueries({
           queryKey: [`rates-tenantId-${session?.user?.id}`],
         });
-        logger.info("Rate created successfully", response);
-        showAlert("success", "Rate created successfully");
-      } catch (error) {
-        setError("Failed to create rate");
-        console.error("Error creating rate:", error);
-        showAlert("error", "Failed to create rate: " + error);
+        showAlert("success", successMessage, "/dashboard/rates");
+        return true;
+      } catch (error: any) {
+        setError(error || "An error occurred");
+        console.error(`Error: ${error}`);
+        showAlert("error", errorMessage + error);
+        return false;
       } finally {
         setIsLoading(false);
       }
     },
-    [showAlert],
+    [queryClient, session, showAlert],
+  );
+
+  const createRate = useCallback(
+    async (propertyId: number, rateData: RateRequestType) => {
+      return handleRateOperation(
+        async () => {
+          logger.info(`Creating rate for property: ${propertyId}`);
+          await rateService.setRate(propertyId, rateData);
+        },
+        "Rate created successfully",
+        "Failed setting rate: ",
+      );
+    },
+    [handleRateOperation],
   );
 
   const updateRate = useCallback(
     async (rateId: number, rateData: RateRequestType) => {
-      setIsLoading(true);
-      setError(null);
-      try {
-        await rateService.updateRate(rateId, rateData);
-        await queryClient.invalidateQueries({
-          queryKey: [`rates-tenantId-${session?.user?.id}`],
-        });
-        showAlert("success", "Rate updated successfully");
-      } catch (error) {
-        setError("Failed to update rate");
-        console.error("Error updating rate:", error);
-        showAlert("error", "Failed to update rate: " + error);
-      } finally {
-        setIsLoading(false);
-      }
+      return handleRateOperation(
+        async () => {
+          await rateService.updateRate(rateId, rateData);
+        },
+        "Rate updated successfully",
+        "Failed updating rate: ",
+      );
     },
-    [showAlert],
+    [handleRateOperation],
   );
 
   const deleteRate = useCallback(
     async (rateId: number) => {
-      setIsLoading(true);
-      setError(null);
-      try {
-        await rateService.deleteRate(rateId);
-        showAlert("success", "Rate deleted successfully");
-        await queryClient.invalidateQueries({
-          queryKey: [`rates-tenantId-${session?.user?.id}`],
-        });
-      } catch (error) {
-        setError("Failed to delete rate");
-        console.error("Error deleting rate:", error);
-        showAlert("error", "Failed to delete rate: " + error);
-      } finally {
-        setIsLoading(false);
-      }
+      return handleRateOperation(
+        async () => {
+          await rateService.deleteRate(rateId);
+        },
+        "Rate deleted successfully",
+        "Failed deleting rate",
+      );
     },
-    [showAlert],
+    [handleRateOperation],
   );
 
   return {
     rates,
-    isLoading,
+    isLoading: isLoading || rateIsLoading,
     error,
+    rateError,
     createRate,
     updateRate,
     deleteRate,

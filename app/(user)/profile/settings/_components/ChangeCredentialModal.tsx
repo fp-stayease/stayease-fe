@@ -12,76 +12,88 @@ import FormikInput from "@/components/FormikInput";
 import { useForgotPassword } from "@/hooks/auth/useForgotPassword";
 import { useChangeEmail } from "@/hooks/auth/useChangeEmail";
 import LoadingButton from "@/components/LoadingButton";
+import { useSession } from "next-auth/react";
 
-interface ForgotPasswordModalProps {
+interface ChangeCredentialModalProps {
   isOpen: boolean;
   onClose: () => void;
   isPasswordReset: boolean;
 }
 
-const ForgotPasswordSchema = yup.object().shape({
-  email: yup.string().email("Invalid email").required("Required"),
-});
-
-const ChangeCredentialModal: React.FC<ForgotPasswordModalProps> = ({
+const ChangeCredentialModal: React.FC<ChangeCredentialModalProps> = ({
   isOpen,
   onClose,
   isPasswordReset,
 }) => {
-  const { forgotPassword, isLoading, error } = useForgotPassword();
+  const { data: session } = useSession();
+  const {
+    forgotPassword,
+    isLoading: passwordLoading,
+    error: passwordError,
+  } = useForgotPassword();
   const {
     initiateChangeEmail,
-    isLoading: emailIsLoading,
+    isLoading: emailLoading,
     error: emailError,
   } = useChangeEmail();
 
-  const handleSubmit = async (
-    values: { email: string },
-    { setSubmitting }: any,
-  ) => {
-    let res;
-    if (isPasswordReset) {
-      res = await forgotPassword(values.email);
-    } else {
-      res = await initiateChangeEmail(values.email);
-    }
-    setSubmitting(false);
-    console.log("error", res);
-    console.log("emailError", emailError);
-    if (!error && !emailError && res?.success) {
-      onClose();
+  const isLoading = passwordLoading || emailLoading;
+  const error = passwordError || emailError;
+
+  const handleSubmit = async (values: { email: string }) => {
+    try {
+      const res = isPasswordReset
+        ? await forgotPassword(session ? undefined : values.email)
+        : await initiateChangeEmail(values.email);
+
+      if (res?.success) {
+        onClose();
+      }
+    } catch (err) {
+      console.error("Error submitting form:", err);
     }
   };
 
-  const title = isPasswordReset ? "Reset Password" : "Change E-mail";
+  const validationSchema = yup.object().shape({
+    email:
+      isPasswordReset && session
+        ? yup.string()
+        : yup.string().email("Invalid email").required("Required"),
+  });
+
+  const modalTitle = isPasswordReset ? "Reset Password" : "Change E-mail";
   const buttonText = isPasswordReset
     ? "Send Reset Link"
     : "Send E-mail Verification Link";
-  const placeholder = isPasswordReset ? "Enter your email" : "Enter new email";
+  const emailPlaceholder = isPasswordReset
+    ? "Enter your email"
+    : "Enter new email";
+
+  const showEmailInput = !session || !isPasswordReset;
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>{title}</DialogTitle>
+          <DialogTitle>{modalTitle}</DialogTitle>
         </DialogHeader>
         <Formik
           initialValues={{ email: "" }}
-          validationSchema={ForgotPasswordSchema}
+          validationSchema={validationSchema}
           onSubmit={handleSubmit}
         >
           {({ isSubmitting }) => (
             <Form className="space-y-4">
-              <FormikInput
-                name="email"
-                type="email"
-                placeholder={placeholder}
-                className="w-full p-2 border rounded"
-              />
-              {(error || emailError) && (
-                <div className="text-red-500 text-sm mt-1">
-                  {error || emailError}
-                </div>
+              {showEmailInput && (
+                <FormikInput
+                  name="email"
+                  type="email"
+                  placeholder={emailPlaceholder}
+                  className="w-full p-2 border rounded"
+                />
+              )}
+              {error && (
+                <div className="text-red-500 text-sm mt-1">{error}</div>
               )}
               {isLoading || isSubmitting ? (
                 <LoadingButton title="Sending request..." />

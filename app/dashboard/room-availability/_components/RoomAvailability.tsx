@@ -7,8 +7,8 @@ import RoomAvailabilityCalendar from "@/app/dashboard/room-availability/_compone
 import ConfirmationDialog from "@/app/dashboard/room-availability/_components/ConfirmationDialog";
 import { useAlert } from "@/context/AlertContext";
 import GlobalLoading from "@/components/GlobalLoading";
-import ErrorComponent from "@/components/ErrorComponent";
 import InstructionPopover from "@/app/dashboard/room-availability/_components/CalendarInstruction";
+import ErrorComponent from "@/components/ErrorComponent";
 
 const RoomAvailability: React.FC = () => {
   const {
@@ -26,14 +26,6 @@ const RoomAvailability: React.FC = () => {
   } | null>(null);
   const [selectedEvent, setSelectedEvent] = useState<any>(null);
   const { showAlert } = useAlert();
-
-  const handleOpenDialog = () => {
-    setIsDialogOpen(true);
-  };
-
-  const handleCloseDialog = () => {
-    setIsDialogOpen(false);
-  };
 
   const handleDateSelect = (start: Date, end: Date) => {
     setSelectedDates({ start, end });
@@ -73,11 +65,7 @@ const RoomAvailability: React.FC = () => {
   };
 
   if (!availabilityData || isLoading) {
-    return (
-      <div className="flex items-center justify-center align-middle h-[200px]">
-        <GlobalLoading height={100} width={100} />
-      </div>
-    );
+    return <GlobalLoading height={100} width={100} />;
   }
 
   return (
@@ -87,7 +75,7 @@ const RoomAvailability: React.FC = () => {
         <InstructionPopover />
       </div>
       <Button
-        onClick={handleOpenDialog}
+        onClick={() => setIsDialogOpen(true)}
         className="bg-blue-950 text-appgray hover:bg-gray-400 hover:text-blue-950 my-5"
       >
         Set Availability
@@ -99,7 +87,7 @@ const RoomAvailability: React.FC = () => {
       />
       <AvailabilityDialog
         isOpen={isDialogOpen}
-        onClose={handleCloseDialog}
+        onClose={() => setIsDialogOpen(false)}
         onSubmit={handleSubmitNewAvailability}
         preSelectedDates={selectedDates}
       />
