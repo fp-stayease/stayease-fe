@@ -9,8 +9,10 @@ import { FaInfoCircle } from "react-icons/fa";
 const InstructionPopover: React.FC = () => {
   return (
     <Popover>
-      <PopoverTrigger>
-        <FaInfoCircle className="w-5 h-5 text-blue-600 cursor-pointer ml-2" />
+      <PopoverTrigger asChild>
+        <div className="inline-block">
+          <FaInfoCircle className="w-5 h-5 text-blue-600 cursor-pointer ml-2" />
+        </div>
       </PopoverTrigger>
       <PopoverContent className="w-[calc(100vw-2rem)] max-w-sm sm:max-w-md md:max-w-lg">
         <h3 className="font-semibold mb-2 text-lg">
