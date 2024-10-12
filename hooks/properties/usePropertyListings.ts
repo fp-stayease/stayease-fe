@@ -13,7 +13,7 @@ export interface FilterOptions {
   maxPrice?: number;
   startDate?: Date;
   endDate?: Date;
-  categoryId?: string;
+  categoryName?: string;
   searchTerm?: string;
 }
 
@@ -29,7 +29,7 @@ export const initialFilters: FilterOptions = {
   maxPrice: undefined,
   startDate: undefined,
   endDate: undefined,
-  categoryId: "",
+  categoryName: "",
   searchTerm: "",
 };
 
@@ -79,7 +79,7 @@ export const usePropertyListings = () => {
         filters.startDate,
         filters.endDate,
         filters.city,
-        filters.categoryId ? Number(filters.categoryId) : undefined,
+        filters.categoryName,
         filters.searchTerm,
         filters.minPrice,
         filters.maxPrice,

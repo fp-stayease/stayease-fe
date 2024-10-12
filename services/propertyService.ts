@@ -1,13 +1,13 @@
 import { config } from "@/constants/url";
 import axiosInterceptor from "@/utils/axiosInterceptor";
 import {
-  RoomWithAdjustedRatesType,
   AvailablePropertyType,
   CategoryType,
   CurrentAvailablePropertyType,
   PropertyAndRoomType,
   PropertyListingType,
   RoomType,
+  RoomWithAdjustedRatesType,
 } from "@/constants/Property";
 import { format } from "date-fns";
 import { formatDate } from "@/utils/dateFormatter";
@@ -379,7 +379,7 @@ const propertyService = {
     startDate?: Date,
     endDate?: Date,
     city?: string,
-    categoryId?: number,
+    categoryName?: string,
     searchTerm?: string,
     minPrice?: number,
     maxPrice?: number,
@@ -402,7 +402,7 @@ const propertyService = {
       ...(formattedStartDate && { startDate: formattedStartDate }),
       ...(formattedEndDate && { endDate: formattedEndDate }),
       ...(city && { city }),
-      ...(categoryId && { categoryId }),
+      ...(categoryName && { categoryName }),
       ...(searchTerm && { searchTerm }),
       ...(minPrice !== undefined && { minPrice }),
       ...(maxPrice !== undefined && { maxPrice }),
