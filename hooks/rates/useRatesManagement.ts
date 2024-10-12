@@ -4,11 +4,6 @@ import { usePeakSeasonRate } from "./usePeakSeasonRate";
 import { useAutoRateSetting } from "@/hooks/rates/useAutoRateSetting";
 import { AutoRateRequestType, RateRequestType } from "@/constants/Rates";
 
-interface RatesManagementProps {
-  onClose?: () => void;
-  initialPropertyId?: number;
-}
-
 export const useRatesManagement = (
   onClose: () => void,
   initialPropertyId?: number,
@@ -40,6 +35,11 @@ export const useRatesManagement = (
 
   const handleManualSubmit = useCallback(
     async (rateData: RateRequestType, isEditing: boolean, rateId?: number) => {
+      if (!selectedPropertyId) {
+        setError("Please select a property");
+        return;
+      }
+
       setIsLoading(true);
       setError(null);
       try {
@@ -71,6 +71,11 @@ export const useRatesManagement = (
 
   const handleAutoSubmit = useCallback(
     async (data: Partial<AutoRateRequestType>) => {
+      if (!selectedPropertyId) {
+        setError("Please select a property");
+        return;
+      }
+
       console.log("Auto submit data", data);
       if (selectedPropertyId) {
         try {

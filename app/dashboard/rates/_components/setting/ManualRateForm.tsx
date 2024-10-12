@@ -21,12 +21,14 @@ interface ManualRateFormProps {
   initialData?: RateRequestType;
   isLoading: boolean;
   isEditing: boolean;
+  selectedPropertyId: number | null;
 }
 export const ManualRateForm: React.FC<ManualRateFormProps> = ({
   onSubmit,
   initialData,
   isLoading,
   isEditing,
+  selectedPropertyId,
 }) => {
   const [isStartDateOpen, setIsStartDateOpen] = useState(false);
   const [isEndDateOpen, setIsEndDateOpen] = useState(false);
@@ -217,6 +219,7 @@ export const ManualRateForm: React.FC<ManualRateFormProps> = ({
             <Button
               type="submit"
               className="w-full bg-blue-950 text-appgray hover:bg-appgray hover:text-blue-950 mt-5"
+              disabled={!selectedPropertyId}
             >
               {initialData ? "Update Rate" : "Set Rate"}
             </Button>
