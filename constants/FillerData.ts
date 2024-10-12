@@ -19,6 +19,10 @@ export const heroImages = [
     src: "https://res.cloudinary.com/duxay6ujg/image/upload/v1726642846/verify_mboavx.webp",
     alt: "Hero Image 5",
   },
+  {
+    src: "https://res.cloudinary.com/duxay6ujg/image/upload/v1726642932/select_zotmvs.webp",
+    alt: "Hero Image 6",
+  },
 ];
 
 export const fillerTestimonials = [

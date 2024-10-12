@@ -8,6 +8,8 @@ import {
   CarouselItem,
 } from "@/components/ui/carousel";
 import Image from "next/image";
+import { Simulate } from "react-dom/test-utils";
+import play = Simulate.play;
 
 interface CarouselPluginProps {
   className?: string;
@@ -24,8 +26,8 @@ export function CarouselPlugin({ className, images }: CarouselPluginProps) {
     <Carousel
       plugins={[plugin.current]}
       className={`carousel relative w-full h-full ${className}`}
-      onMouseEnter={plugin.current.stop}
-      onMouseLeave={plugin.current.reset}
+      onMouseEnter={() => plugin.current.stop()}
+      onMouseLeave={() => plugin.current.play()}
     >
       <CarouselContent>
         {images.map((image, index) => (
