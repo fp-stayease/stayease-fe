@@ -8,6 +8,9 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { useRoomAvailability } from "@/hooks/reports/useRoomAvailability";
+import { useRoomAvailabilityContext } from "@/context/RoomAvailabilityContext";
+import LoadingButton from "@/components/LoadingButton";
 
 interface ConfirmationDialogProps {
   isOpen: boolean;
@@ -24,6 +27,8 @@ const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
   title,
   description,
 }) => {
+  const { isLoading } = useRoomAvailabilityContext();
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent>
@@ -32,10 +37,19 @@ const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
           <DialogDescription>{description}</DialogDescription>
         </DialogHeader>
         <DialogFooter>
-          <Button variant="outline" onClick={onClose}>
-            Cancel
-          </Button>
-          <Button onClick={onConfirm}>Confirm</Button>
+          {isLoading ? (
+            <LoadingButton
+              title="Removing Unavailability..."
+              className="w-fit"
+            />
+          ) : (
+            <>
+              <Button variant="outline" onClick={onClose}>
+                Cancel
+              </Button>
+              <Button onClick={onConfirm}>Confirm</Button>
+            </>
+          )}
         </DialogFooter>
       </DialogContent>
     </Dialog>

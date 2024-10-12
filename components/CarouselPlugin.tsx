@@ -1,6 +1,6 @@
 "use client";
 import * as React from "react";
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import Autoplay from "embla-carousel-autoplay";
 import {
   Carousel,
@@ -8,8 +8,6 @@ import {
   CarouselItem,
 } from "@/components/ui/carousel";
 import Image from "next/image";
-import { Simulate } from "react-dom/test-utils";
-import play = Simulate.play;
 
 interface CarouselPluginProps {
   className?: string;
