@@ -22,68 +22,70 @@ export const useAutoRateSetting = (propertyId: number) => {
   } = useFetchData<AutoRateResponseType>(
     `auto-rate-setting-${propertyId}`,
     () => rateService.getAutoRateSetting(propertyId),
+    { enabled: propertyId !== 0 },
   );
 
   useEffect(() => {
     if (fetchedSetting) {
       setAutoRateSetting(fetchedSetting);
     }
-  }, [fetchedSetting, propertyId]);
+  }, [fetchedSetting]);
 
-  const updateAutoRateSetting = useCallback(
-    async (data: Partial<AutoRateRequestType>) => {
+  const handleAutoRateOperation = useCallback(
+    async (
+      operation: () => Promise<void>,
+      successMessage: string,
+      errorMessage: string,
+    ) => {
       setIsLoading(true);
       setError(null);
       try {
-        await rateService.setOrUpdateAutoRateSetting(propertyId, data);
+        await operation();
         await queryClient.invalidateQueries({
           queryKey: [`rates-tenantId-${session?.user?.id}`],
         });
-        console.log("Auto rate setting updated successfully");
-        showAlert("success", "Auto rate setting updated successfully");
+        showAlert("success", successMessage, "/dashboard/rates");
+        return true;
       } catch (error: any) {
-        setError(error.response.statusMessage);
-        console.error(
-          "Error updating rate setting:",
-          error.response.statusMessage,
-        );
-        showAlert(
-          "error",
-          "Failed to update rate setting: " + error.response.statusMessage,
-        );
+        setError(error || "An error occurred");
+        console.error(`Error: ${error}`);
+        showAlert("error", errorMessage + error);
+        return false;
       } finally {
         setIsLoading(false);
       }
     },
-    [propertyId, showAlert],
+    [queryClient, session, showAlert],
+  );
+
+  const updateAutoRateSetting = useCallback(
+    async (data: Partial<AutoRateRequestType>) => {
+      return handleAutoRateOperation(
+        async () => {
+          await rateService.setOrUpdateAutoRateSetting(propertyId, data);
+        },
+        "Auto rate setting updated successfully",
+        "Failed updating auto rate setting: ",
+      );
+    },
+    [handleAutoRateOperation, propertyId],
   );
 
   const deactivateAutoRateSetting = useCallback(async () => {
-    setIsLoading(true);
-    setError(null);
-    try {
-      await rateService.deactivateAutoRateSetting(propertyId);
-      await queryClient.invalidateQueries({
-        queryKey: [`rates-tenantId-${session?.user?.id}`],
-      });
-      console.log("Auto rate setting deactivated successfully");
-      showAlert("success", "Auto rate setting deactivated successfully");
-    } catch (error: any) {
-      setError("Failed to deactivate rate setting");
-      console.error("Error deactivating rate setting:", error.response.data);
-      showAlert(
-        "error",
-        "Failed to deactivate rate setting: " + error.response.data,
-      );
-    } finally {
-      setIsLoading(false);
-    }
-  }, [propertyId, showAlert]);
+    return handleAutoRateOperation(
+      async () => {
+        await rateService.deactivateAutoRateSetting(propertyId);
+      },
+      "Auto rate setting deactivated successfully",
+      "Failed deactivating auto rate setting: ",
+    );
+  }, [handleAutoRateOperation, propertyId]);
 
   return {
     autoRateSetting,
     error,
-    isLoading,
+    rateError,
+    isLoading: isLoading || rateIsLoading,
     updateAutoRateSetting,
     deactivateAutoRateSetting,
   };
