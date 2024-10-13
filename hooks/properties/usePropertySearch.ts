@@ -9,6 +9,7 @@ import {
   buildUrl,
   getFilterFromParams,
 } from "@/utils/urlBuilder";
+import { debounce } from "lodash";
 
 export const usePropertySearch = () => {
   const searchParams = useSearchParams();
@@ -28,15 +29,15 @@ export const usePropertySearch = () => {
     };
   }, [searchParams]);
 
-  // Update URL parameters with new filters
+  // Debounced function to update URL parameters with new filters
   const updateSearchParams = useCallback(
-    (filters: Partial<FilterOptions>) => {
+    debounce((filters: Partial<FilterOptions>) => {
       const currentPath = new URL(window.location.href).pathname;
       const newParams = buildSearchParams(filters);
       router.replace(`${currentPath}?${newParams.toString()}`, {
         scroll: false,
       });
-    },
+    }, 1000),
     [router],
   );
 
