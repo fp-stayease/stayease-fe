@@ -104,7 +104,7 @@ export const columns: ColumnDef<BookingDataType>[] = [
             return (
                 <div className="uppercase font-semibold">
                     <Tag className={color}>
-                        {row.getValue("status")}
+                        {status.replaceAll("_", " ")}
                     </Tag>
                 </div>
             )
@@ -135,10 +135,10 @@ export const columns: ColumnDef<BookingDataType>[] = [
                             <DetailButton bookingId={bookingId} />
                         </DropdownMenuItem>
                         {
-                            paymentMethod === "manual_transfer" && paymentStatus === "waiting for confirmation" &&
+                            paymentMethod === "manual_transfer" && paymentStatus === "WAITING_FOR_CONFIRMATION" &&
                                 <div className="w-full flex flex-col gap-2">
                                     <PaymentProofDialog paymentProof={paymentProof} totalAmount={totalAmount}/>
-                                    <PaymentActionDialog bookingId={bookingId} isApproval/>
+                                    <PaymentActionDialog bookingId={bookingId} isApproval={true} />
                                     <PaymentActionDialog bookingId={bookingId} isApproval={false}/>
                                 </div>
                         }

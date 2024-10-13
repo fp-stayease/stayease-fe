@@ -1,6 +1,9 @@
+"use client";
+
+import UploadProofDialog from "@/components/UploadProofDialog";
 import {PaymentType} from "@/constants/Payment";
 import {FC} from "react";
-import UploadProofDialog from "@/components/UploadProofDialog";
+import {usePathname} from "next/navigation";
 
 interface ManualTransferInfoProps {
     payment: PaymentType;
@@ -8,20 +11,27 @@ interface ManualTransferInfoProps {
 }
 
 const TransferInfo: FC<ManualTransferInfoProps> = ({ payment, bookingId }) => {
+    const pathname = usePathname();
     let paymentMethodName;
+    const paymentTime = new Date(payment?.paymentExpirationAt).toLocaleTimeString('en-US', {
+        hour12: false,
+        hour: '2-digit',
+        minute: '2-digit'
+    });
     if (payment?.paymentMethod === "manual_transfer") {
         paymentMethodName = "ATM/Manual Transfer";
     } else {
         paymentMethodName = "Bank VA";
     }
-    if (payment?.paymentStatus === "pending" && payment?.paymentMethod === "manual_transfer") {
+
+    if (payment?.paymentStatus === "PENDING" && payment?.paymentMethod === "manual_transfer" && !pathname.includes("dashboard")) {
         return (
             <div className="w-full flex flex-col gap-2 text-blue-950">
                 <p>Payment Type: ATM/Manual Transfer</p>
                 <p>Status: Waiting for Payment</p>
                 <div className="flex items-center gap-2 text-blue-950">
-                    <p>Please complete the payment by uploading your payment proof before</p>
-                    <p className="text-red-800 font-semibold">15:30</p>
+                    <p className="text-red-800">Expired at:</p>
+                    <p className="text-red-800 font-semibold">{paymentTime}</p>
                 </div>
                 <div className="w-full flex flex-col gap-1 text-blue-950 text-sm">
                     <p>Bank: BCA</p>
@@ -32,19 +42,21 @@ const TransferInfo: FC<ManualTransferInfoProps> = ({ payment, bookingId }) => {
             </div>
         )
     }
-    if (payment?.paymentStatus === "pending" && payment?.paymentMethod === "bank_transfer") {
+    if (payment?.paymentStatus === "PENDING" && payment?.paymentMethod === "bank_transfer" && !pathname.includes("dashboard")) {
         return (
             <div className="w-full flex flex-col gap-2 text-blue-950">
                 <p>Payment Type: Bank Virtual Account</p>
                 <p>Status: Waiting for Payment</p>
                 <div className="flex items-center gap-2 text-blue-950">
-                    <p>Please complete the payment by uploading your payment proof before</p>
-                    <p className="text-red-800 font-semibold">15:30</p>
+                    <p>Expired at:</p>
+                    <p className="text-red-800 font-semibold">
+                        {paymentTime}
+                    </p>
                 </div>
                 <div className="w-full flex flex-col gap-1 text-blue-950 text-sm">
+                    <p>Bank: {payment?.bank}</p>
                     <p>Virtual Account Number: {payment?.bankVa}</p>
                 </div>
-                <UploadProofDialog bookingId={bookingId}/>
             </div>
         )
     }
