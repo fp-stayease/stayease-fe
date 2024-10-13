@@ -26,6 +26,7 @@ interface ComboboxProps {
   onSelect: (value: string) => void;
   value?: string;
   className?: string;
+  filterLabel?: boolean;
 }
 
 const Combobox: React.FC<ComboboxProps> = ({
@@ -34,6 +35,7 @@ const Combobox: React.FC<ComboboxProps> = ({
   onSelect,
   value: externalValue,
   className,
+  filterLabel,
 }) => {
   const [open, setOpen] = useState(false);
   const [internalValue, setInternalValue] = useState(externalValue || "");
@@ -43,6 +45,16 @@ const Combobox: React.FC<ComboboxProps> = ({
       setInternalValue(externalValue);
     }
   }, [externalValue]);
+
+  // opt for filtering by label instead of value
+  const filterChoices = (
+    choices: { value: string; label: string }[],
+    searchValue: string,
+  ) => {
+    return choices.filter((choice) =>
+      choice.label.toLowerCase().includes(searchValue.toLowerCase()),
+    );
+  };
 
   const handleSelect = (currentValue: string) => {
     const newValue = currentValue === internalValue ? "" : currentValue;
@@ -72,15 +84,17 @@ const Combobox: React.FC<ComboboxProps> = ({
           <CommandList>
             <CommandEmpty>No choice found.</CommandEmpty>
             <CommandGroup>
-              {choices.map((choice) => (
-                <CommandItem
-                  key={choice.value}
-                  value={choice.value}
-                  onSelect={handleSelect}
-                >
-                  {choice.label}
-                </CommandItem>
-              ))}
+              {(filterLabel ? filterChoices(choices, "") : choices).map(
+                (choice) => (
+                  <CommandItem
+                    key={choice.value}
+                    value={choice.label}
+                    onSelect={() => handleSelect(choice.value)}
+                  >
+                    {choice.label}
+                  </CommandItem>
+                ),
+              )}
             </CommandGroup>
           </CommandList>
         </Command>
