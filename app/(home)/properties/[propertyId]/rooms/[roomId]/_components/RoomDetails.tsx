@@ -74,7 +74,7 @@ const RoomDetailsComponent: React.FC<RoomDetailsProps> = ({ room }) => {
     await router.push(
       `/book?checkInDate=${bookingValues.checkInDate}&checkOutDate=${bookingValues.checkOutDate}&roomId=${room.roomId}&propertyId=${room.propertyId}&totalAdults=1`,
     );
-  }, [room.roomId, bookingValues, router]);
+  }, [room.roomId, room.propertyId, bookingValues, router]);
 
   const priceInfo = useMemo(() => {
     const priceChange = room.adjustedPrice - room.basePrice;
