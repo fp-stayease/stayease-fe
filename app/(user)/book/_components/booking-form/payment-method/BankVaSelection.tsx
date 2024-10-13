@@ -1,5 +1,5 @@
-import BankOption from "@/app/(user)/book/_components/BankOption";
 import {banks} from "@/constants/Banks";
+import BankOption from "@/app/(user)/book/_components/booking-form/payment-method/BankOption";
 
 const BankVaSelection = () => {
     return (

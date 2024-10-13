@@ -1,6 +1,5 @@
-import React from 'react';
-import GuestsDialog from "@/app/(user)/book/_components/GuestsDialog";
 import {useBookingValues} from "@/hooks/transactions/useBookingValues";
+import GuestsDialog from "@/app/(user)/book/_components/booking-form/stay-info/GuestDialog";
 
 const GuestInfo = () => {
     const { bookingValues } = useBookingValues();

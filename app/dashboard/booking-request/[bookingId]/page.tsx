@@ -1,9 +1,11 @@
+import BookingDetailView from "@/components/BookingDetailView";
+import {notFound} from "next/navigation";
+
 const BookingDetailPage = ({ params }: { params: { bookingId: string } }) => {
-    return (
-        <div>
-            Booking Detail Page {params.bookingId}
-        </div>
-    );
+    if (!params.bookingId) {
+        notFound();
+    }
+    return <BookingDetailView bookingId={params.bookingId} />;
 };
 
 export default BookingDetailPage;

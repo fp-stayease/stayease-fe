@@ -1,11 +1,12 @@
 "use client";
 
 import TenantReviewCard from "@/app/dashboard/reviews/_components/TenantReviewCard";
+import ReviewsFilter from "@/components/ReviewsFilter";
+import ListLoading from "@/components/ListLoading";
 import {useReviewParams} from "@/hooks/reviews/useReviewParams";
 import {useTenantReviews} from "@/hooks/reviews/useReviews";
 import {Loader2} from "lucide-react";
 import {Button} from "@/components/ui/button";
-import ReviewsFilter from "@/components/ReviewsFilter";
 
 const TenantReviewList = () => {
     const {reviewParams, handleParamsChange} = useReviewParams();
@@ -20,12 +21,7 @@ const TenantReviewList = () => {
 
     console.log(tenantReviews);
 
-    if (isLoading) return <div className="w-full flex items-center justify-center">
-        <div className="flex items-center gap-2">
-            <Loader2 className="w-4 h-4 text-blue-950 animate-spin" />
-            <p className="text-blue-950">Loading...</p>
-        </div>
-    </div>
+    if (isLoading) return <ListLoading />
 
     if (error) return <>Something went wrong</>;
 

@@ -79,6 +79,7 @@ export const config = {
     bookings: {
       tenantBookings: "/bookings/tenant",
       userBookings: "/bookings/user",
+      bookingDetail: "/bookings/",
     },
     transactions: {
       tenant: "/transactions",

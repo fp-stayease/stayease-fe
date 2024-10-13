@@ -7,5 +7,6 @@ export type PaymentType = {
     paymentStatus: string;
     paymentProof: string | null;
     bankVa: string | null;
+    bank: string;
     paymentExpirationAt: string;
 };

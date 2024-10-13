@@ -1,8 +1,9 @@
 "use client";
 
 import {useRouter, useSearchParams} from "next/navigation";
-import {useCallback, useEffect, useState} from "react";
+import {useCallback, useEffect, useMemo, useState} from "react";
 import {UserBookingsType} from "@/constants/Booking";
+import _ from "lodash";
 
 export const useUserBookingsFilter = () => {
     const router = useRouter();
@@ -30,6 +31,13 @@ export const useUserBookingsFilter = () => {
         }));
     }, [searchParams]);
 
+    const debouncedUpdateURL = useMemo(
+        () => _.debounce((params: URLSearchParams) => {
+            router.push(`?${params.toString()}`);
+        }, 1000),
+        [router]
+    );
+
     const setQuery = useCallback((newQuery: Partial<UserBookingsType>) => {
         setQueries((prev) => {
             const updatedQueries= { ...prev, ...newQuery };
@@ -40,10 +48,10 @@ export const useUserBookingsFilter = () => {
                     newParams.set(key, value.toString());
                 }
             });
-            router.push(`?${newParams.toString()}`);
+            debouncedUpdateURL(newParams);
             return updatedQueries;
-        })
-    }, [router]);
+        });
+    }, [debouncedUpdateURL]);
 
     return { queries, setQuery }
 }

@@ -10,8 +10,7 @@ import {
     DialogTrigger,
     DialogClose,
 } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import GuestEditorBtn from "@/app/(user)/book/_components/GuestEditorBtn";
+import GuestEditorBtn from "@/app/(user)/book/_components/booking-form/stay-info/GuestEditorBtn";
 import {useBookingValues} from "@/hooks/transactions/useBookingValues";
 
 const GuestsDialog = () => {
