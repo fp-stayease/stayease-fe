@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useCategoryManagement } from "@/hooks/properties/useCategoryManagement";
 import LoadingButton from "@/components/LoadingButton";
+import Combobox from "@/components/Combobox";
 
 interface CategoryDropdownProps {
   initialCategoryId?: number;
@@ -24,10 +25,19 @@ const CategoryDropdown: React.FC<CategoryDropdownProps> = ({
     isLoading,
   } = useCategoryManagement(initialCategoryId);
 
-  const onSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const value = e.target.value;
-    handleSelectChange(value);
-    if (value !== "new") {
+  const categoryChoices = [
+    { value: "new", label: "Create new category" },
+    ...(categories?.map((category) => ({
+      value: category.id.toString(),
+      label: category.name,
+    })) || []),
+  ];
+
+  const onSelectChange = (value: string) => {
+    if (value === "new") {
+      setIsCreatingNew(true);
+    } else {
+      handleSelectChange(value);
       setFieldValue("property.categoryId", Number(value));
     }
   };
@@ -45,21 +55,17 @@ const CategoryDropdown: React.FC<CategoryDropdownProps> = ({
   return (
     <div>
       {!isCreatingNew ? (
-        <div className="flex flex-col gap-2.5">
+        <div className="flex flex-col gap-2.5 w-full">
           <Label htmlFor="property.categoryId">Category</Label>
-          <select
-            value={selectedCategory?.id || ""}
-            onChange={onSelectChange}
-            className="h-full p-2.5 border rounded-lg text-sm"
-          >
-            <option value="">Select a category</option>
-            <option value="new">Create new category</option>
-            {categories?.map((category) => (
-              <option key={category.id} value={category.id}>
-                {category.name}
-              </option>
-            ))}
-          </select>
+          <div className="w-full">
+            <Combobox
+              placeholder="Select Category"
+              choices={categoryChoices}
+              onSelect={onSelectChange}
+              value={selectedCategory ? selectedCategory.id.toString() : ""}
+              className="w-full p-0"
+            />
+          </div>
           <ErrorMessage
             name="property.categoryId"
             component="div"
@@ -83,13 +89,14 @@ const CategoryDropdown: React.FC<CategoryDropdownProps> = ({
             ) : (
               <>
                 <Button
-                  type="submit"
+                  type="button"
                   onClick={onCreateNew}
                   className="bg-blue-950 hover:bg-gray-100 hover:text-blue-950"
                 >
                   Create
                 </Button>
                 <Button
+                  type="button"
                   onClick={() => setIsCreatingNew(false)}
                   className="bg-appcancel hover:bg-appgray hover:text-appcancel"
                 >

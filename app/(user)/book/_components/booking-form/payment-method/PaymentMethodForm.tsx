@@ -1,5 +1,4 @@
-import React from 'react';
-import PaymentSelection from "@/app/(user)/book/_components/PaymentSelection";
+import PaymentSelection from "@/app/(user)/book/_components/booking-form/payment-method/PaymentSelection";
 
 const PaymentMethodForm = () => {
     return (

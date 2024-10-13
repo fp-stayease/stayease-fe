@@ -6,9 +6,10 @@ import BookingCard from "@/app/(user)/profile/bookings/_components/BookingCard";
 import {useUserBookingList} from "@/hooks/transactions/useUserBookingList";
 import {useUserBookingsFilter} from "@/hooks/transactions/useUserBookingsFilter";
 import {Button} from "@/components/ui/button";
+import ListLoading from "@/components/ListLoading";
 
 const BookingList = () => {
-    const { queries } = useUserBookingsFilter();
+    const { queries, setQuery } = useUserBookingsFilter();
     const {
         bookings,
         isLoading,
@@ -18,15 +19,15 @@ const BookingList = () => {
         fetchNextPage } = useUserBookingList(queries);
 
     return (
-        <div className="w-full grid grid-cols-1 gap-2">
+        <div className="w-full grid grid-cols-1 gap-y-4">
             <div className="w-full flex flex-col xl:flex-row md:items-start xl:items-center justify-between gap-2">
-                <Input placeholder="Search your bookings" className="w-full xl:max-w-96" />
-                <div className="w-full xl:w-max flex flex-col md:flex-row gap-2 items-center">
-                    <DatePicker name="checkInDate" label="Select check-in date" onChange={() => ("")} isEditing className="w-full xl:max-w-96" />
-                    <DatePicker name="checkOutDate" label="Select check-out date" onChange={() => ("")} isEditing className="w-full xl:max-w-96" />
-                </div>
+                <Input
+                    placeholder="Search by property name"
+                    className="w-full xl:max-w-96"
+                    onChange={e => setQuery({search: e.target.value})}
+                />
             </div>
-            { isLoading &&  <>Loading...</> }
+            { isLoading &&  <ListLoading /> }
             { error && <>Oops... Something went wrong, failed to fetch your booking list</> }
             {
                 bookings?.map((booking, i) => (

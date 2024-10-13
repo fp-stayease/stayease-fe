@@ -1,7 +1,7 @@
 import React from 'react';
 import FormikSelect from "@/components/formik/FormikSelect";
 import {useField} from "formik";
-import BankVaSelection from "@/app/(user)/book/_components/BankVASelection";
+import BankVaSelection from "@/app/(user)/book/_components/booking-form/payment-method/BankVaSelection";
 
 const options = [
     { label: "ATM/Bank Transfer", value: "manual_transfer" },

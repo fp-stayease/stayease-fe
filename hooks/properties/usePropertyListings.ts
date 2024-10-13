@@ -1,10 +1,12 @@
 import { AvailablePropertyType } from "@/constants/Property";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import propertyService from "@/services/propertyService";
 import { usePropertySearch } from "./usePropertySearch";
 import { buildSearchParams } from "@/utils/urlBuilder";
 import { useRouter } from "next/navigation";
 import _ from "lodash";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useFetchData } from "@/hooks/utils/useFetchData";
 
 export interface FilterOptions {
   city?: string;
@@ -13,7 +15,7 @@ export interface FilterOptions {
   maxPrice?: number;
   startDate?: Date;
   endDate?: Date;
-  categoryId?: string;
+  categoryName?: string;
   searchTerm?: string;
 }
 
@@ -29,7 +31,7 @@ export const initialFilters: FilterOptions = {
   maxPrice: undefined,
   startDate: undefined,
   endDate: undefined,
-  categoryId: "",
+  categoryName: "",
   searchTerm: "",
 };
 
@@ -49,115 +51,97 @@ export const usePropertyListings = () => {
   const router = useRouter();
   const { getUrlFilters, updateSearchParams } = usePropertySearch();
   const [filters, setFilters] = useState<FilterOptions>(getUrlFilters());
-  const [properties, setProperties] = useState<AvailablePropertyType[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
+  const [debouncedFilters, setDebouncedFilters] =
+    useState<FilterOptions>(filters);
   const [sort, setSort] = useState<SortOption>(initialSort);
   const [pagination, setPagination] = useState(initialPagination);
 
-  // Update filters from URL parameters on mount
-  useEffect(() => {
-    const urlFilters = getUrlFilters();
-    setFilters(urlFilters);
-  }, [getUrlFilters]);
+  const queryKey = useMemo(
+    () => ["propertyListings", debouncedFilters, sort, pagination],
+    [debouncedFilters, sort, pagination],
+  );
 
-  // Reset filters to initial state
+  const {
+    data: propertyListingsData,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey,
+    queryFn: () =>
+      propertyService.sortAndFilter(
+        debouncedFilters.startDate,
+        debouncedFilters.endDate,
+        debouncedFilters.city,
+        debouncedFilters.categoryName,
+        debouncedFilters.searchTerm,
+        debouncedFilters.minPrice,
+        debouncedFilters.maxPrice,
+        debouncedFilters.guestCount
+          ? Number(debouncedFilters.guestCount)
+          : undefined,
+        pagination.currentPage,
+        pagination.size,
+        sort.sortBy,
+        sort.sortDirection,
+      ),
+    staleTime: 1000 * 60 * 5, // 5 mins
+    gcTime: 1000 * 60 * 10, // 10 mins
+  });
+
+  // Debounce the filter updates for API calls
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedFilters(filters);
+    }, 500); // 500ms delay
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [filters]);
+
+  // Update URL immediately when filters change
+  useEffect(() => {
+    const params = buildSearchParams(filters);
+    router.replace(`/properties?${params.toString()}`, { scroll: false });
+    updateSearchParams(filters);
+  }, [filters, router, updateSearchParams]);
+
   const resetFilters = useCallback(() => {
     setFilters(initialFilters);
     setSort({ sortBy: "name", sortDirection: "ASC" });
     setPagination((prev) => ({ ...prev, currentPage: 0 }));
     updateSearchParams({});
     router.replace("/properties");
-  }, [updateSearchParams]);
+  }, [updateSearchParams, router]);
 
-  // Fetch property listings based on current filters, sort, and pagination
-  const fetchPropertyListings = useCallback(async () => {
-    setIsLoading(true);
-    setError(null);
-    try {
-      const result = await propertyService.sortAndFilter(
-        filters.startDate,
-        filters.endDate,
-        filters.city,
-        filters.categoryId ? Number(filters.categoryId) : undefined,
-        filters.searchTerm,
-        filters.minPrice,
-        filters.maxPrice,
-        filters.guestCount ? Number(filters.guestCount) : undefined,
-        pagination.currentPage,
-        pagination.size,
-        sort.sortBy,
-        sort.sortDirection,
-      );
-      setProperties(result.content);
-      setPagination((prev) => ({
-        ...prev,
-        currentPage: result.currentPage,
-        totalPages: result.totalPages,
-        totalElements: result.totalElements,
-      }));
-    } catch (e) {
-      setError(e instanceof Error ? e.message : "An error occurred");
-    } finally {
-      setIsLoading(false);
-    }
-  }, [filters, pagination.currentPage, pagination.size, sort, router]);
+  const updateFilters = useCallback((newFilters: Partial<FilterOptions>) => {
+    setFilters((prev) => ({
+      ...prev,
+      ...newFilters,
+    }));
+    setPagination((prev) => ({ ...prev, currentPage: 0 }));
+  }, []);
 
-  // Debounce the fetch function to avoid rapid calls
-  const debouncedFetchPropertyListings = useCallback(
-    _.debounce(fetchPropertyListings, 1000),
-    [fetchPropertyListings],
-  );
-
-  // Trigger fetch when dependencies change
-  useEffect(() => {
-    debouncedFetchPropertyListings();
-  }, [
-    debouncedFetchPropertyListings,
-    filters,
-    pagination.currentPage,
-    pagination.size,
-    sort,
-    router,
-  ]);
-
-  // Update filters and reset pagination
-  const updateFilters = useCallback(
-    (newFilters: Partial<FilterOptions>) => {
-      setFilters((prev) => {
-        const updatedFilters = { ...prev, ...newFilters };
-
-        // Only update URL if filters have changed
-        if (JSON.stringify(updatedFilters) !== JSON.stringify(prev)) {
-          updateSearchParams(updatedFilters);
-          const params = buildSearchParams(updatedFilters);
-          router.replace(`/properties?${params.toString()}`, { scroll: false });
-        }
-        return updatedFilters;
-      });
-      setPagination((prev) => ({ ...prev, currentPage: 0 }));
-    },
-    [updateSearchParams, router],
-  );
-
-  // Update sort and reset pagination
   const updateSort = useCallback((newSort: Partial<SortOption>) => {
     setSort((prev) => ({ ...prev, ...newSort }));
     setPagination((prev) => ({ ...prev, currentPage: 0 }));
   }, []);
 
-  // Update current page
   const updatePage = useCallback((newPage: number) => {
     setPagination((prev) => ({ ...prev, currentPage: newPage }));
   }, []);
 
   return {
-    properties,
+    properties: propertyListingsData?.content || [],
     isLoading,
     error,
     filters,
     sort,
-    pagination,
+    pagination: {
+      ...pagination,
+      totalPages: propertyListingsData?.totalPages || 0,
+      totalElements: propertyListingsData?.totalElements || 0,
+    },
     updateFilters,
     updateSort,
     updatePage,

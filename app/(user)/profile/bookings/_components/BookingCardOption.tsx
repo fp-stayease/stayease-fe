@@ -11,9 +11,10 @@ import {useRouter} from "next/navigation";
 interface BookingCardOptionsProps {
     bookingId: string;
     status: string;
+    paymentMethod: string;
 }
 
-const BookingCardOption: FC<BookingCardOptionsProps> = ({ bookingId, status }) => {
+const BookingCardOption: FC<BookingCardOptionsProps> = ({ bookingId, status, paymentMethod }) => {
     const router = useRouter();
     return (
         <DropdownMenu>
@@ -26,7 +27,7 @@ const BookingCardOption: FC<BookingCardOptionsProps> = ({ bookingId, status }) =
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
-                    {status === "pending" && (
+                    {status === "PENDING" && paymentMethod === "manual_transfer" && (
                         <>
                             <CancelBookingDialog bookingId={bookingId} />
                             <UploadProofDialog bookingId={bookingId} />

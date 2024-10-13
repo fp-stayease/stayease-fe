@@ -108,7 +108,7 @@ const rateService = {
       logger.info("Rate set successfully", response.data.data);
       return response.data.data;
     } catch (error: any) {
-      throw error;
+      throw error.response.data.message;
     }
   },
 
@@ -172,7 +172,7 @@ const rateService = {
       );
       return response.data.data;
     } catch (error: any) {
-      throw error;
+      throw error.response.data.message;
     }
   },
 

@@ -72,7 +72,7 @@ const RoomDetailsComponent: React.FC<RoomDetailsProps> = ({ room }) => {
       bookingValues,
     );
     await router.push(
-      `/book?checkInDate=${bookingValues.checkInDate}&checkOutDate=${bookingValues.checkOutDate}&roomId=${room.roomId}`,
+      `/book?checkInDate=${bookingValues.checkInDate}&checkOutDate=${bookingValues.checkOutDate}&roomId=${room.roomId}&propertyId=${room.propertyId}&totalAdults=1`,
     );
   }, [room.roomId, bookingValues, router]);
 
@@ -93,8 +93,8 @@ const RoomDetailsComponent: React.FC<RoomDetailsProps> = ({ room }) => {
               src={room.imageUrl || "/api/placeholder/800/400"}
               alt={room.roomName}
               fill
-              objectFit="cover"
-              className="rounded-lg"
+              sizes="100%"
+              className="rounded-lg object-cover"
             />
           </div>
 

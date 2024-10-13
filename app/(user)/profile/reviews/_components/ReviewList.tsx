@@ -6,6 +6,7 @@ import {useUserReviews} from "@/hooks/reviews/useReviews";
 import {Button} from "@/components/ui/button";
 import {Loader2} from "lucide-react";
 import {useReviewParams} from "@/hooks/reviews/useReviewParams";
+import ListLoading from "@/components/ListLoading";
 
 const ReviewList = () => {
     const {reviewParams} = useReviewParams();
@@ -18,7 +19,7 @@ const ReviewList = () => {
         fetchNextPage,
     } = useUserReviews(reviewParams);
 
-    if (isLoading) return <>Loading...</>
+    if (isLoading) return <ListLoading />
     if (error) return <>Something went wrong</>;
 
     return (

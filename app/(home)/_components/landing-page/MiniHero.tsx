@@ -20,8 +20,8 @@ const MiniHero = () => {
                 src={`https://res.cloudinary.com/duxay6ujg/image/upload/v1726767340/Mask_group_1_wc5ilc.png`}
                 alt="Building"
                 fill
-                objectFit="scale-down"
-                className=""
+                sizes="100%"
+                className="object-scale-down"
               />
             </div>
             <div className="absolute bottom-0 right-0 w-2/3 h-2/3">
@@ -29,8 +29,8 @@ const MiniHero = () => {
                 src={`https://res.cloudinary.com/duxay6ujg/image/upload/v1726767340/catarina-carvalho-cqMwRNd0i7I-unsplash_aimgbo.png`}
                 alt="Door"
                 fill
-                objectFit="scale-down"
-                className=""
+                sizes="100%"
+                className="object-scale-down"
               />
             </div>
           </div>
