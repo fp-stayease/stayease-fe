@@ -29,15 +29,15 @@ export const usePropertySearch = () => {
     };
   }, [searchParams]);
 
-  // Debounced function to update URL parameters with new filters
+  /// Function to update URL parameters with new filters
   const updateSearchParams = useCallback(
-    debounce((filters: Partial<FilterOptions>) => {
+    (filters: Partial<FilterOptions>) => {
       const currentPath = new URL(window.location.href).pathname;
       const newParams = buildSearchParams(filters);
       router.replace(`${currentPath}?${newParams.toString()}`, {
         scroll: false,
       });
-    }, 1000),
+    },
     [router],
   );
 
