@@ -103,7 +103,7 @@ export const ManualRateForm: React.FC<ManualRateFormProps> = ({
     startDate: null as unknown as Date,
     endDate: null as unknown as Date,
     adjustmentRate: 0,
-    adjustmentType: "PERCENTAGE",
+    adjustmentType: null as unknown as string,
     reason: "",
   };
 
