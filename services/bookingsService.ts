@@ -1,6 +1,8 @@
 import {config} from "@/constants/url";
-import {UserBookingsType} from "@/constants/Booking";
+import {BookingDataType, UserBookingsType} from "@/constants/Booking";
 import axiosInterceptor from "@/utils/axiosInterceptor";
+import {Simulate} from "react-dom/test-utils";
+import error = Simulate.error;
 
 export const bookingsService = {
     getTenantBookings: async () => {
@@ -17,6 +19,15 @@ export const bookingsService = {
             const { data } = await axiosInterceptor.get(config.endpoints.bookings.userBookings, {
                 params: query,
             });
+            return data.data;
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
+    },
+    getBookingDetail: async (id: string): Promise<BookingDataType> => {
+        try {
+            const { data } = await axiosInterceptor.get(config.endpoints.bookings.bookingDetail + id);
             return data.data;
         } catch (error) {
             console.log(error);

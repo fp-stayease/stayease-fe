@@ -73,5 +73,5 @@ export type UserBookingsType = {
     search: string | null;
 };
 
-export const rejectedBookings = ["payment failed", "expired", "cancelled"];
-export const pendingBookings = ["pending", "waiting for confirmation"];
+export const rejectedBookings = ["EXPIRED", "CANCELLED", "FAILED"];
+export const pendingBookings = ["IN_PROGRESS", "WAITING_FOR_CONFIRMATION", "PENDING"];
