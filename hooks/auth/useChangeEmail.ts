@@ -14,11 +14,13 @@ export const useChangeEmail = () => {
     setIsLoading(true);
     setError(null);
     try {
-      await profileService.changeEmailRequest(email);
+      const response = await profileService.changeEmailRequest(email);
       showAlert(
         "success",
         "Email change request sent successfully, please check your email to verify the change.",
       );
+      console.log("response:", response);
+      return response;
     } catch (err: any) {
       handleError(
         err,

@@ -100,11 +100,15 @@ export const profileService = {
     }
   },
 
-  changeEmailRequest: async (newEmail: string): Promise<void> => {
+  changeEmailRequest: async (newEmail: string): Promise<any> => {
     try {
       logger.info("Requesting email change");
-      await axiosInterceptor.post(config.endpoints.users.email, { newEmail });
+      const response = await axiosInterceptor.post(
+        config.endpoints.users.email,
+        { newEmail },
+      );
       logger.info("Email change request successful");
+      return response.data;
     } catch (error: any) {
       logger.error("Email change request failed", { error });
       throw error.response.data.message;
