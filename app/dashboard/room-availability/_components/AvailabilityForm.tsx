@@ -8,6 +8,8 @@ import { usePropertyData } from "@/hooks/properties/usePropertyData";
 import { CustomDatePicker } from "@/components/CustomDatePicker";
 import { useTenantProperties } from "@/hooks/properties/useTenantProperties";
 import { roomAvailabilityValidationSchema } from "@/constants/PropertyValidationSchema";
+import { useRoomAvailabilityContext } from "@/context/RoomAvailabilityContext";
+import LoadingButton from "@/components/LoadingButton";
 
 interface AvailabilityFormProps {
   onSubmit: (roomId: number, startDate: Date, endDate: Date) => void;
@@ -33,6 +35,7 @@ const AvailabilityForm: React.FC<AvailabilityFormProps> = ({
   const { propertyById } = usePropertyData(
     selectedPropertyId ? parseInt(selectedPropertyId) : 0,
   );
+  const { isLoading, error } = useRoomAvailabilityContext();
 
   useEffect(() => {
     if (preSelectedDates) {
@@ -177,9 +180,14 @@ const AvailabilityForm: React.FC<AvailabilityFormProps> = ({
               className="text-red-500 text-sm"
             />
           </div>
-          <Button type="submit" className="bg-blue-950 text-white">
-            Set Availability
-          </Button>
+          {error && <p className="text-sm text-red-500">{error}</p>}
+          {isLoading ? (
+            <LoadingButton title="Setting Room as Unavailable.." />
+          ) : (
+            <Button type="submit" className="bg-blue-950 text-white w-full">
+              Set Availability
+            </Button>
+          )}
         </Form>
       )}
     </Formik>

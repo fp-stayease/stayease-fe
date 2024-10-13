@@ -1,6 +1,5 @@
 "use client";
 import React, { useState } from "react";
-import { useRoomAvailability } from "@/hooks/reports/useRoomAvailability";
 import AvailabilityDialog from "./AvailabilityDialog";
 import { Button } from "@/components/ui/button";
 import RoomAvailabilityCalendar from "@/app/dashboard/room-availability/_components/RoomAvailabilityCalendar";
@@ -8,16 +7,16 @@ import ConfirmationDialog from "@/app/dashboard/room-availability/_components/Co
 import { useAlert } from "@/context/AlertContext";
 import GlobalLoading from "@/components/GlobalLoading";
 import InstructionPopover from "@/app/dashboard/room-availability/_components/CalendarInstruction";
-import ErrorComponent from "@/components/ErrorComponent";
+import { useRoomAvailabilityContext } from "@/context/RoomAvailabilityContext";
 
 const RoomAvailability: React.FC = () => {
   const {
     availabilityData,
-    isLoading,
+    dataLoading,
     error,
     setAvailability,
     removeAvailability,
-  } = useRoomAvailability();
+  } = useRoomAvailabilityContext();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
   const [selectedDates, setSelectedDates] = useState<{
@@ -32,13 +31,15 @@ const RoomAvailability: React.FC = () => {
     setIsDialogOpen(true);
   };
 
-  const handleSubmitNewAvailability = (
+  const handleSubmitNewAvailability = async (
     roomId: number,
     startDate: Date,
     endDate: Date,
   ) => {
-    setAvailability(roomId, startDate, endDate);
-    setIsDialogOpen(false);
+    const success = await setAvailability(roomId, startDate, endDate);
+    if (success && !error) {
+      setIsDialogOpen(false);
+    }
   };
 
   const handleEventClick = (event: any) => {
@@ -53,9 +54,9 @@ const RoomAvailability: React.FC = () => {
     }
   };
 
-  const handleConfirmRemove = () => {
+  const handleConfirmRemove = async () => {
     if (selectedEvent) {
-      removeAvailability(
+      await removeAvailability(
         selectedEvent.extendedProps.roomId,
         parseInt(selectedEvent.id),
       );
@@ -64,7 +65,7 @@ const RoomAvailability: React.FC = () => {
     setSelectedEvent(null);
   };
 
-  if (!availabilityData || isLoading) {
+  if (!availabilityData || dataLoading) {
     return <GlobalLoading height={100} width={100} />;
   }
 

@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import CustomSelect from "@/components/CustomSelect";
 import BudgetInput from "@/app/(home)/properties/_components/BudgetInput";
 import { CustomDatePicker } from "@/components/CustomDatePicker";
 import { FilterOptions } from "@/hooks/properties/usePropertyListings";
 import { Button } from "@/components/ui/button";
 import { addDays, startOfDay } from "date-fns";
 import { usePropertyUtils } from "@/hooks/properties/usePropertyUtils";
+import Combobox from "@/components/Combobox";
 
 interface SearchFilterCardProps {
   filters: FilterOptions;
@@ -44,6 +44,14 @@ const SearchFilterCard: React.FC<SearchFilterCardProps> = ({
     setCheckOutOpen(false);
   };
 
+  const cityChoices =
+    cities?.map((city) => ({ value: city, label: city })) || [];
+  const categoryChoices =
+    categories?.map((cat) => ({
+      value: cat.name,
+      label: cat.name.charAt(0).toUpperCase() + cat.name.slice(1),
+    })) || [];
+
   return (
     <Card className="mb-4">
       <CardContent className="p-4">
@@ -56,7 +64,7 @@ const SearchFilterCard: React.FC<SearchFilterCardProps> = ({
 
         <div className="space-y-4">
           <Input
-            placeholder="Search properties..."
+            placeholder="Enter keyword..."
             value={filters.searchTerm}
             onChange={(e) => handleInputChange("searchTerm", e.target.value)}
             className="mb-2"
@@ -65,11 +73,11 @@ const SearchFilterCard: React.FC<SearchFilterCardProps> = ({
 
         <div>
           <h3 className="font-semibold mb-2 text-blue-950">Location</h3>
-          <CustomSelect
-            title="Select City"
-            options={cities?.map((city) => ({ value: city, label: city }))}
+          <Combobox
+            placeholder="Select City"
+            choices={cityChoices}
+            onSelect={(value) => handleInputChange("city", value)}
             value={filters.city}
-            onChange={(value) => handleInputChange("city", value)}
           />
         </div>
 
@@ -128,14 +136,11 @@ const SearchFilterCard: React.FC<SearchFilterCardProps> = ({
 
         <div className="mb-4">
           <h3 className="font-semibold mb-2 text-blue-950">Category</h3>
-          <CustomSelect
-            title="Select Category"
-            options={categories?.map((cat) => ({
-              value: cat.id.toString(),
-              label: cat.name.charAt(0).toUpperCase() + cat.name.slice(1),
-            }))}
-            value={filters.categoryId}
-            onChange={(value) => handleInputChange("categoryId", value)}
+          <Combobox
+            placeholder="Select Category"
+            choices={categoryChoices}
+            onSelect={(value) => handleInputChange("categoryName", value)}
+            value={filters.categoryName}
           />
         </div>
       </CardContent>

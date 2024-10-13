@@ -50,7 +50,7 @@ export const getFilterFromParams = (
   const maxPrice = searchParams.get("maxPrice");
   const startDate = searchParams.get("startDate");
   const endDate = searchParams.get("endDate");
-  const categoryId = searchParams.get("categoryId");
+  const categoryName = searchParams.get("categoryName");
   const searchTerm = searchParams.get("searchTerm");
 
   if (city) newFilters.city = city;
@@ -59,7 +59,7 @@ export const getFilterFromParams = (
   if (maxPrice) newFilters.maxPrice = parseInt(maxPrice);
   newFilters.startDate = parseDate(startDate);
   newFilters.endDate = parseDate(endDate);
-  if (categoryId) newFilters.categoryId = categoryId;
+  if (categoryName) newFilters.categoryName = categoryName;
   if (searchTerm) newFilters.searchTerm = searchTerm;
 
   return newFilters;

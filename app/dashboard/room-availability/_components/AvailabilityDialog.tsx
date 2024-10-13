@@ -6,6 +6,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import AvailabilityForm from "@/app/dashboard/room-availability/_components/AvailabilityForm";
+import { useRoomAvailabilityContext } from "@/context/RoomAvailabilityContext";
 
 interface AvailabilityDialogProps {
   isOpen: boolean;
@@ -20,8 +21,13 @@ const AvailabilityDialog: React.FC<AvailabilityDialogProps> = ({
   onSubmit,
   preSelectedDates,
 }) => {
+  const { clearError } = useRoomAvailabilityContext();
+  const handleClose = () => {
+    clearError();
+    onClose();
+  };
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
+    <Dialog open={isOpen} onOpenChange={handleClose}>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Set Room Availability</DialogTitle>

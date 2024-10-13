@@ -93,8 +93,8 @@ const RoomDetailsComponent: React.FC<RoomDetailsProps> = ({ room }) => {
               src={room.imageUrl || "/api/placeholder/800/400"}
               alt={room.roomName}
               fill
-              objectFit="cover"
-              className="rounded-lg"
+              sizes="100%"
+              className="rounded-lg object-cover"
             />
           </div>
 

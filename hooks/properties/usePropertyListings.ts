@@ -5,6 +5,8 @@ import { usePropertySearch } from "./usePropertySearch";
 import { buildSearchParams } from "@/utils/urlBuilder";
 import { useRouter } from "next/navigation";
 import _ from "lodash";
+import { useQuery } from "@tanstack/react-query";
+import { useFetchData } from "@/hooks/utils/useFetchData";
 
 export interface FilterOptions {
   city?: string;
@@ -13,7 +15,7 @@ export interface FilterOptions {
   maxPrice?: number;
   startDate?: Date;
   endDate?: Date;
-  categoryId?: string;
+  categoryName?: string;
   searchTerm?: string;
 }
 
@@ -29,7 +31,7 @@ export const initialFilters: FilterOptions = {
   maxPrice: undefined,
   startDate: undefined,
   endDate: undefined,
-  categoryId: "",
+  categoryName: "",
   searchTerm: "",
 };
 
@@ -54,12 +56,13 @@ export const usePropertyListings = () => {
   const [error, setError] = useState<string | null>(null);
   const [sort, setSort] = useState<SortOption>(initialSort);
   const [pagination, setPagination] = useState(initialPagination);
+  const [shouldUpdateUrl, setShouldUpdateUrl] = useState(false);
 
   // Update filters from URL parameters on mount
   useEffect(() => {
     const urlFilters = getUrlFilters();
     setFilters(urlFilters);
-  }, [getUrlFilters]);
+  }, [getUrlFilters, updateSearchParams]);
 
   // Reset filters to initial state
   const resetFilters = useCallback(() => {
@@ -79,7 +82,7 @@ export const usePropertyListings = () => {
         filters.startDate,
         filters.endDate,
         filters.city,
-        filters.categoryId ? Number(filters.categoryId) : undefined,
+        filters.categoryName,
         filters.searchTerm,
         filters.minPrice,
         filters.maxPrice,
@@ -105,7 +108,7 @@ export const usePropertyListings = () => {
 
   // Debounce the fetch function to avoid rapid calls
   const debouncedFetchPropertyListings = useCallback(
-    _.debounce(fetchPropertyListings, 1000),
+    _.debounce(fetchPropertyListings, 500),
     [fetchPropertyListings],
   );
 
@@ -122,23 +125,31 @@ export const usePropertyListings = () => {
   ]);
 
   // Update filters and reset pagination
-  const updateFilters = useCallback(
-    (newFilters: Partial<FilterOptions>) => {
+  const debouncedUpdateFilters = useCallback(
+    _.debounce((newFilters: Partial<FilterOptions>) => {
       setFilters((prev) => {
         const updatedFilters = { ...prev, ...newFilters };
 
         // Only update URL if filters have changed
         if (JSON.stringify(updatedFilters) !== JSON.stringify(prev)) {
-          updateSearchParams(updatedFilters);
-          const params = buildSearchParams(updatedFilters);
-          router.replace(`/properties?${params.toString()}`, { scroll: false });
+          setShouldUpdateUrl(true);
         }
         return updatedFilters;
       });
       setPagination((prev) => ({ ...prev, currentPage: 0 }));
-    },
+    }, 100), // Adjust the delay time as needed (500ms)
     [updateSearchParams, router],
   );
+
+  // Trigger URL update once filters are updated, outside of the render phase
+  useEffect(() => {
+    if (shouldUpdateUrl) {
+      const params = buildSearchParams(filters);
+      router.replace(`/properties?${params.toString()}`, { scroll: false });
+      updateSearchParams(filters); // Update search params to maintain state
+      setShouldUpdateUrl(false); // Reset the flag
+    }
+  }, [filters, shouldUpdateUrl, router, updateSearchParams]);
 
   // Update sort and reset pagination
   const updateSort = useCallback((newSort: Partial<SortOption>) => {
@@ -158,7 +169,7 @@ export const usePropertyListings = () => {
     filters,
     sort,
     pagination,
-    updateFilters,
+    updateFilters: debouncedUpdateFilters,
     updateSort,
     updatePage,
     resetFilters,
