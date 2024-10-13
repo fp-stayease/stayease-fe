@@ -64,6 +64,7 @@ const CategoryDropdown: React.FC<CategoryDropdownProps> = ({
               onSelect={onSelectChange}
               value={selectedCategory ? selectedCategory.id.toString() : ""}
               className="w-full p-0"
+              filterLabel={true}
             />
           </div>
           <ErrorMessage
