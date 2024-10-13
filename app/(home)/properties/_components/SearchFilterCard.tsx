@@ -64,7 +64,7 @@ const SearchFilterCard: React.FC<SearchFilterCardProps> = ({
 
         <div className="space-y-4">
           <Input
-            placeholder="Enter keyword..."
+            placeholder="Search properties..."
             value={filters.searchTerm}
             onChange={(e) => handleInputChange("searchTerm", e.target.value)}
             className="mb-2"
