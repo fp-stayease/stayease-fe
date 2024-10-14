@@ -7,9 +7,9 @@ const PopularRoomsCard = () => {
     return (
         <Card className="col-span-3 text-blue-950">
             <CardHeader>
-                <CardTitle>Recent Sales</CardTitle>
+                <CardTitle>Popular Rooms</CardTitle>
                 <CardDescription>
-                    Your popular rooms
+                    Your all time popular rooms
                 </CardDescription>
             </CardHeader>
             <CardContent>

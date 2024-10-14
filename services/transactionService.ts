@@ -45,5 +45,14 @@ export const transactionService = {
             console.log(error);
             throw error;
         }
+    },
+    tenantCancelTrx: async (bookingId: string) => {
+        try {
+            const {data} = await axiosInterceptor.post(`${config.endpoints.transactions.tenant}/${bookingId}`, {});
+            return data.data;
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
     }
 };

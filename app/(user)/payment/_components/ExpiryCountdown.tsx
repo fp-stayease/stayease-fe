@@ -38,7 +38,7 @@ const ExpiryCountdown: FC<ExpiryCountdownProps> = ({ expirationDate }) => {
     }
 
     return (
-        <div className="w-full flex items-center justify-between">
+        <div className="w-full flex flex-col md:flex-row md:items-center md:justify-between">
             <h2 className="font-semibold mb-2 text-red-600">Payment Expires In:</h2>
             <div className="grid grid-cols-4 gap-2 text-center">
                 <div className="bg-white p-2 rounded">

@@ -4,7 +4,7 @@ import React, { FC } from "react";
 import { EllipsisVertical } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import UploadProofDialog from "@/components/UploadProofDialog";
-import CancelBookingDialog from "@/app/(user)/profile/bookings/_components/CancelBookingDialog";
+import CancelBookingDialog from "@/components/CancelBookingDialog";
 import {DropdownMenu, DropdownMenuContent, DropdownMenuTrigger} from "@/components/ui/dropdown-menu";
 import {useRouter} from "next/navigation";
 
@@ -27,9 +27,9 @@ const BookingCardOption: FC<BookingCardOptionsProps> = ({ bookingId, status, pay
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
-                    {status === "PENDING" && paymentMethod === "manual_transfer" && (
+                    {(status === "PENDING" || status === "IN_PROGRESS") && (
                         <>
-                            <CancelBookingDialog bookingId={bookingId} />
+                            <CancelBookingDialog bookingId={bookingId} queryKey="get-user-bookings" />
                             <UploadProofDialog bookingId={bookingId} />
                         </>
                     )}
