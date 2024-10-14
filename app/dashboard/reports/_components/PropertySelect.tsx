@@ -12,6 +12,7 @@ import {
     SelectTrigger,
     SelectValue
 } from "@/components/ui/select";
+import ListLoading from "@/components/ListLoading";
 
 const PropertySelect = () => {
     const queryClient = useQueryClient();
@@ -39,7 +40,7 @@ const PropertySelect = () => {
                     <SelectLabel className="text-blue-950">Select Property</SelectLabel>
                     {
                         isLoading && !propertyList && (
-                            <>Loading...</>
+                            <ListLoading />
                         )
                     }
                     {

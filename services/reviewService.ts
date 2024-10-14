@@ -1,6 +1,6 @@
 import axiosInterceptor from "@/utils/axiosInterceptor";
 import {config} from "@/constants/url";
-import {ReviewsInputType, ReviewsParamsType} from "@/constants/Review";
+import {ReviewsInputType, ReviewsParamsType, ReviewType} from "@/constants/Review";
 
 export const reviewService = {
     getUserReviews: async (query?: Partial<ReviewsParamsType>) => {
@@ -48,6 +48,15 @@ export const reviewService = {
     createUserReview: async (reviewId: number, value: any) => {
         try {
             const { data } = await axiosInterceptor.post(config.endpoints.reviews.postUserReviews + reviewId, value);
+            return data.data;
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    },
+    getAllReviews: async (): Promise<ReviewType[]> => {
+        try {
+            const {data} = await axiosInterceptor.get(config.endpoints.reviews.allReviews);
             return data.data;
         } catch (error) {
             console.error(error);

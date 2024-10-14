@@ -80,6 +80,7 @@ export const config = {
       tenantBookings: "/bookings/tenant",
       userBookings: "/bookings/user",
       bookingDetail: "/bookings/",
+      upcomingBookings: "/bookings/upcoming-bookings"
     },
     transactions: {
       tenant: "/transactions",
@@ -109,6 +110,7 @@ export const config = {
       updateUserReviews: "/reviews/",
       deleteUserReviews: "/reviews/",
       reviewDetail: "/reviews/",
+      allReviews: "/reviews",
     },
     replies: {
       replyReview: "/replies/{reviewId}",
