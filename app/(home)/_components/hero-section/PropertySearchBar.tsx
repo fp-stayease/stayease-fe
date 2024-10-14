@@ -4,9 +4,9 @@ import Combobox from "@/components/Combobox";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { usePropertyUtils } from "@/hooks/properties/usePropertyUtils";
-import useMediaQuery from "@/hooks/utils/useMediaQuery";
 import { usePropertySearch } from "@/hooks/properties/usePropertySearch";
 import { CustomDatePicker } from "@/components/CustomDatePicker";
+import CurrencyInput from "@/components/CurrencyInput";
 
 interface HeroSearchBarProps {
   className?: string;
@@ -16,18 +16,18 @@ const PropertySearchBar: React.FC<HeroSearchBarProps> = ({ className }) => {
   const { cities, isLoading, error } = usePropertyUtils();
   const { handleRedirect } = usePropertySearch();
   const [selectedCity, setSelectedCity] = useState<string>("");
-  const [budget, setBudget] = useState<string>("");
+  const [budget, setBudget] = useState<number | undefined>(undefined);
   const [date, setDate] = useState<Date | undefined>(undefined);
-  const [guestCount, setGuestCount] = useState<string>(""); // New state for guest count
+  const [guestCount, setGuestCount] = useState<string>("");
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     handleRedirect(
       {
         city: selectedCity,
-        maxPrice: budget ? parseInt(budget, 10) : undefined,
+        maxPrice: budget,
         startDate: date,
-        guestCount: guestCount ? parseInt(guestCount, 10) : undefined, // Include guest count in search params
+        guestCount: guestCount ? parseInt(guestCount, 10) : undefined,
       },
       "/properties",
     );
@@ -39,6 +39,10 @@ const PropertySearchBar: React.FC<HeroSearchBarProps> = ({ className }) => {
       label: city,
     })) || [];
 
+  const handleBudgetChange = (name: string, value: number | null) => {
+    setBudget(value || undefined);
+  };
+
   const renderSearchInputs = () => (
     <>
       <div style={{ flex: "2 1 0%" }}>
@@ -49,12 +53,11 @@ const PropertySearchBar: React.FC<HeroSearchBarProps> = ({ className }) => {
         />
       </div>
       <div style={{ flex: "2 1 0%" }}>
-        <Input
-          type="number"
+        <CurrencyInput
+          name="budget"
+          value={budget || null}
+          onChange={handleBudgetChange}
           placeholder="Budget"
-          className="p-2 border rounded-lg"
-          value={budget}
-          onChange={(e) => setBudget(e.target.value)}
         />
       </div>
       <div style={{ flex: "2 1 0%" }}>

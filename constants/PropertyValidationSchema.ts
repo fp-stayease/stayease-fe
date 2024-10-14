@@ -24,12 +24,14 @@ export const createPropValidationSchema = yup.object().shape({
     yup.object().shape({
       name: yup.string().required("Required"),
       description: yup.string().required("Required"),
-      basePrice: yup.number().required("Required").positive("Must be positive"),
+      basePrice: yup
+        .number()
+        .required("Required")
+        .moreThan(0, "Must be more than 0"),
       capacity: yup
         .number()
         .required("Required")
-        .positive("Must be positive")
-        .integer("Must be an integer"),
+        .moreThan(0, "Must be more than 0"),
       imageUrl: yup.string().required("Required"),
     }),
   ),

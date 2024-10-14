@@ -62,7 +62,9 @@ const CategoryDropdown: React.FC<CategoryDropdownProps> = ({
               placeholder="Select Category"
               choices={categoryChoices}
               onSelect={onSelectChange}
-              value={selectedCategory ? selectedCategory.id.toString() : ""}
+              value={
+                selectedCategory ? selectedCategory.id.toString() : undefined
+              }
               className="w-full p-0"
               filterLabel={true}
             />
