@@ -9,6 +9,7 @@ import { autoRateSettingValidationSchema } from "@/constants/PropertyValidationS
 import RateDeleteDialog from "@/app/dashboard/rates/_components/RateDeleteDialog";
 import TypeSelect from "@/app/dashboard/rates/_components/setting/TypeSelect";
 import LoadingButton from "@/components/LoadingButton";
+import AdjustmentRateInput from "@/app/dashboard/rates/_components/setting/AdjustmentRateInput";
 
 export const typeItems = [
   { value: "PERCENTAGE", label: "Percentage" },
@@ -85,25 +86,14 @@ export const AutomaticRateForm: React.FC<AutomaticRateFormProps> = ({
               <div className="space-y-4">
                 <div className="flex flex-col md:flex-row md:space-x-4 space-y-4 md:space-y-0">
                   <div className="flex-1">
-                    <Label htmlFor="holidayAdjustmentRate">
-                      Holiday Adjustment Rate
-                    </Label>
-                    <Field name="holidayAdjustmentRate">
-                      {({ field }: FieldProps) => (
-                        <Input
-                          {...field}
-                          type="number"
-                          value={field.value === null ? "" : field.value}
-                          onChange={(e) => {
-                            const value =
-                              e.target.value === ""
-                                ? null
-                                : Number(e.target.value);
-                            setFieldValue("holidayAdjustmentRate", value);
-                          }}
-                        />
-                      )}
-                    </Field>
+                    <AdjustmentRateInput
+                      name="holidayAdjustmentRate"
+                      label="Holiday Adjustment Rate"
+                      value={values.holidayAdjustmentRate || null}
+                      onChange={(name, value) => setFieldValue(name, value)}
+                      adjustmentType={values.holidayAdjustmentType || ""}
+                      placeholder="Enter holiday adjustment rate"
+                    />
                     <ErrorMessage
                       name="holidayAdjustmentRate"
                       component="div"
@@ -122,25 +112,14 @@ export const AutomaticRateForm: React.FC<AutomaticRateFormProps> = ({
 
                 <div className="flex flex-col md:flex-row md:space-x-4 space-y-4 md:space-y-0">
                   <div className="flex-1">
-                    <Label htmlFor="longWeekendAdjustmentRate">
-                      Long Weekend Adjustment Rate
-                    </Label>
-                    <Field name="longWeekendAdjustmentRate">
-                      {({ field }: FieldProps) => (
-                        <Input
-                          {...field}
-                          type="number"
-                          value={field.value === null ? "" : field.value}
-                          onChange={(e) => {
-                            const value =
-                              e.target.value === ""
-                                ? null
-                                : Number(e.target.value);
-                            setFieldValue("longWeekendAdjustmentRate", value);
-                          }}
-                        />
-                      )}
-                    </Field>
+                    <AdjustmentRateInput
+                      name="longWeekendAdjustmentRate"
+                      label="Long Weekend Adjustment Rate"
+                      value={values.longWeekendAdjustmentRate || null}
+                      onChange={(name, value) => setFieldValue(name, value)}
+                      adjustmentType={values.longWeekendAdjustmentType || ""}
+                      placeholder="Enter holiday adjustment rate"
+                    />
                     <ErrorMessage
                       name="longWeekendAdjustmentRate"
                       component="div"

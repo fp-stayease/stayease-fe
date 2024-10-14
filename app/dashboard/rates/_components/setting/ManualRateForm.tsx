@@ -14,6 +14,7 @@ import { typeItems } from "@/app/dashboard/rates/_components/setting/AutomaticRa
 import LoadingButton from "@/components/LoadingButton";
 import { DatePickerField } from "./DatePickerField";
 import { useManualRateForm } from "@/hooks/rates/useManualRateForm";
+import AdjustmentRateInput from "@/app/dashboard/rates/_components/setting/AdjustmentRateInput";
 
 interface ManualRateFormProps {
   onSubmit: (data: RateRequestType) => void;
@@ -47,7 +48,7 @@ export const ManualRateForm: React.FC<ManualRateFormProps> = ({
   const initialValues: RateRequestType = initialData || {
     startDate: null as unknown as Date,
     endDate: null as unknown as Date,
-    adjustmentRate: 0,
+    adjustmentRate: null as unknown as number,
     adjustmentType: null as unknown as string,
     reason: "",
   };
@@ -94,8 +95,14 @@ export const ManualRateForm: React.FC<ManualRateFormProps> = ({
           </div>
           <div className="flex flex-col md:flex-row md:space-x-4 space-y-4 md:space-y-0">
             <div className="flex-1">
-              <Label htmlFor="adjustmentRate">Adjustment Rate</Label>
-              <Field name="adjustmentRate" as={Input} type="number" />
+              <AdjustmentRateInput
+                name="adjustmentRate"
+                label="Adjustment Rate"
+                value={values.adjustmentRate}
+                onChange={(name, value) => setFieldValue(name, value)}
+                adjustmentType={values.adjustmentType || ""}
+                placeholder="Enter adjustment rate"
+              />
               <ErrorMessage
                 name="adjustmentRate"
                 component="div"

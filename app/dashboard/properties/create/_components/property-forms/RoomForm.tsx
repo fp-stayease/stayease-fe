@@ -54,12 +54,19 @@ const RoomForm: React.FC<RoomFormProps> = ({
             />
           </div>
         ))}
-        <CurrencyInput
-          name={`rooms.${index}.basePrice`}
-          label="Base Price"
-          value={room.basePrice}
-          onChange={(name, value) => setFieldValue(name, value)}
-        />
+        <div>
+          <CurrencyInput
+            name={`rooms.${index}.basePrice`}
+            label="Base Price"
+            value={room.basePrice}
+            onChange={(name, value) => setFieldValue(name, value)}
+          />
+          <ErrorMessage
+            name={`rooms.${index}.basePrice`}
+            component="div"
+            className="text-red-500"
+          />
+        </div>
       </div>
       <div className="mt-4">
         <Label>Room Image</Label>

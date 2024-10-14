@@ -5,8 +5,8 @@ import { Label } from "@/components/ui/label";
 interface CurrencyInputProps {
   name: string;
   label: string;
-  value: number | string;
-  onChange: (name: string, value: number) => void;
+  value: number | null;
+  onChange: (name: string, value: number | null) => void;
   placeholder?: string;
 }
 
@@ -20,12 +20,11 @@ const CurrencyInput: React.FC<CurrencyInputProps> = ({
   const [displayValue, setDisplayValue] = useState("");
 
   useEffect(() => {
-    setDisplayValue(formatPrice(value));
+    setDisplayValue(value !== null ? formatPrice(value) : "");
   }, [value]);
 
-  const formatPrice = (price: number | string): string => {
-    const numPrice = typeof price === "string" ? parseFloat(price) : price;
-    return numPrice.toLocaleString("id-ID", {
+  const formatPrice = (price: number): string => {
+    return price.toLocaleString("id-ID", {
       minimumFractionDigits: 0,
       maximumFractionDigits: 0,
     });
@@ -33,7 +32,7 @@ const CurrencyInput: React.FC<CurrencyInputProps> = ({
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const rawValue = e.target.value.replace(/[^\d]/g, "");
-    const numericValue = rawValue ? parseInt(rawValue, 10) : 0;
+    const numericValue = rawValue ? parseInt(rawValue, 10) : null;
     onChange(name, numericValue);
   };
 
@@ -42,7 +41,7 @@ const CurrencyInput: React.FC<CurrencyInputProps> = ({
       <Label htmlFor={name}>{label}</Label>
       <div className="relative">
         <Input
-          placeholder={placeholder ? placeholder : "Input price..."}
+          placeholder={placeholder || "Input price..."}
           id={name}
           name={name}
           type="text"
