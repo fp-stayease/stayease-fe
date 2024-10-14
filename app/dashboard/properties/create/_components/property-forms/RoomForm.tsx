@@ -5,6 +5,7 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import DeleteDialog from "@/app/dashboard/properties/_components/DeleteDialog";
 import ImageUpload from "@/app/dashboard/properties/create/_components/property-forms/ImageUpload";
+import CurrencyInput from "@/components/CurrencyInput";
 
 interface RoomFormProps {
   index: number;
@@ -21,13 +22,12 @@ const RoomForm: React.FC<RoomFormProps> = ({
   propertyId,
   isOnlyRoom,
 }) => {
-  const { values } = useFormikContext<any>();
+  const { values, setFieldValue } = useFormikContext<any>();
   const room = values.rooms[index];
 
   const fields = [
     { name: "name", label: "Name", type: "text" },
     { name: "description", label: "Description", type: "text" },
-    { name: "basePrice", label: "Base Price", type: "number" },
     { name: "capacity", label: "Capacity", type: "number" },
   ];
 
@@ -54,6 +54,12 @@ const RoomForm: React.FC<RoomFormProps> = ({
             />
           </div>
         ))}
+        <CurrencyInput
+          name={`rooms.${index}.basePrice`}
+          label="Base Price"
+          value={room.basePrice}
+          onChange={(name, value) => setFieldValue(name, value)}
+        />
       </div>
       <div className="mt-4">
         <Label>Room Image</Label>
