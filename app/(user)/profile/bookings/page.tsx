@@ -1,5 +1,6 @@
 import React from 'react';
 import BookingList from "@/app/(user)/profile/bookings/_components/BookingList";
+export const dynamic = "force-dynamic";
 
 const UserOrdersPage = () => {
     return (

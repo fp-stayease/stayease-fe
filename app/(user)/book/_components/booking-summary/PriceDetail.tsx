@@ -6,6 +6,7 @@ import { useRoomDetail } from "@/hooks/properties/useRoomDetail";
 import {FC} from "react";
 import {useBookingPropertyInfo} from "@/hooks/transactions/useBookingPropertyInfo";
 import {priceCalculator} from "@/utils/priceCalculator";
+import ListLoading from "@/components/ListLoading";
 
 interface PriceDetailProps {
     propertyId: number;
@@ -29,7 +30,7 @@ const PriceDetail: FC<PriceDetailProps> = ({propertyId, roomId, checkOutDate, ch
                 error && <>Something went wrong. Please try again</>
             }
             {isLoading && !roomPrice ? (
-                <>Loading...</>
+                <ListLoading />
             ) : (
                 <>
                     <div className="w-full flex flex-col gap-3 border-b border-gray-200 pb-5">
