@@ -4,7 +4,7 @@ import { Label } from "@/components/ui/label";
 
 interface CurrencyInputProps {
   name: string;
-  label: string;
+  label?: string;
   value: number | null;
   onChange: (name: string, value: number | null) => void;
   placeholder?: string;
@@ -38,7 +38,7 @@ const CurrencyInput: React.FC<CurrencyInputProps> = ({
 
   return (
     <div>
-      <Label htmlFor={name}>{label}</Label>
+      {label && <Label htmlFor={name}>{label}</Label>}
       <div className="relative">
         <Input
           placeholder={placeholder || "Input price..."}
@@ -49,7 +49,7 @@ const CurrencyInput: React.FC<CurrencyInputProps> = ({
           onChange={handleChange}
           className="pl-8"
         />
-        <div className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400">
+        <div className="text-sm absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400">
           Rp
         </div>
       </div>
