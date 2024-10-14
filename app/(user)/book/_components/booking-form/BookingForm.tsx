@@ -15,6 +15,7 @@ import UserStayingDataForm from "@/app/(user)/book/_components/booking-form/stay
 import SpecialRequest from "@/app/(user)/book/_components/booking-form/special-request/SpecialRequest";
 import PaymentMethodForm from "@/app/(user)/book/_components/booking-form/payment-method/PaymentMethodForm";
 import CancellationPolicy from "@/app/(user)/book/_components/booking-form/CancellationPolicy";
+import ListLoading from "@/components/ListLoading";
 
 interface BookingFormProps {
     checkInDate: string;
@@ -30,9 +31,9 @@ const BookingForm: FC<BookingFormProps> = ({checkInDate, checkOutDate, roomId, p
     const {roomPrice, isAvailable, isLoading, error} =
         useBookingPropertyInfo(propertyId, new Date(checkInDate), new Date(checkOutDate), roomId);
 
-    if (isLoading && !roomPrice) return <>Loading...</>
+    if (isLoading && !roomPrice) return <ListLoading />
     if (error) return <>Something went wrong, please try again</>
-    if (!isAvailable) return <>Room not available for the selected date</>
+    if (!isAvailable) return <>We are very sorry. Room not available for the selected date</>
 
     const daysDiff = calculateDaysBetweenDates(checkInDate, checkOutDate);
     console.log(roomPrice);

@@ -1,13 +1,7 @@
 import { useCallback, useState } from "react";
-import { useAlert } from "@/context/AlertContext";
 import { usePeakSeasonRate } from "./usePeakSeasonRate";
 import { useAutoRateSetting } from "@/hooks/rates/useAutoRateSetting";
 import { AutoRateRequestType, RateRequestType } from "@/constants/Rates";
-
-interface RatesManagementProps {
-  onClose?: () => void;
-  initialPropertyId?: number;
-}
 
 export const useRatesManagement = (
   onClose: () => void,
@@ -17,89 +11,59 @@ export const useRatesManagement = (
     initialPropertyId || null,
   );
   const [error, setError] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const { showAlert } = useAlert();
-  const { createRate, updateRate } = usePeakSeasonRate();
-  const { autoRateSetting, updateAutoRateSetting, deactivateAutoRateSetting } =
-    useAutoRateSetting(selectedPropertyId || 0);
+  const {
+    createRate,
+    updateRate,
+    isLoading: manualLoading,
+    error: manualError,
+  } = usePeakSeasonRate();
+  const {
+    autoRateSetting,
+    updateAutoRateSetting,
+    deactivateAutoRateSetting,
+    isLoading: autoLoading,
+    error: autoError,
+  } = useAutoRateSetting(selectedPropertyId || 0);
 
   const handlePropertyChange = useCallback((propertyId: string) => {
-    if (!propertyId) {
-      setError("Please select a property");
-    } else {
-      setSelectedPropertyId(Number(propertyId));
-      setError(null);
-    }
+    setSelectedPropertyId(propertyId ? Number(propertyId) : null);
+    setError(propertyId ? null : "Please select a property");
   }, []);
-
-  const handleSubmitSuccess = () => {
-    if (onClose) {
-      onClose();
-    }
-  };
 
   const handleManualSubmit = useCallback(
     async (rateData: RateRequestType, isEditing: boolean, rateId?: number) => {
-      setIsLoading(true);
-      setError(null);
-      try {
-        if (isEditing && rateId) {
-          await updateRate(rateId, rateData);
-          showAlert("success", "Rate updated successfully", "/dashboard/rates");
-        } else if (selectedPropertyId) {
-          await createRate(selectedPropertyId, rateData);
-          showAlert("success", "Rate created successfully", "/dashboard/rates");
-        } else {
-          setError("Please select a property");
-          return;
-        }
-        handleSubmitSuccess();
-      } catch (error: any) {
-        setError("Failed to create rate" + error.response.data);
-        console.error("Error creating rate:" + error.response.data);
-        showAlert("error", "Failed to create rate: " + error.response.data);
+      if (!selectedPropertyId) {
+        setError("Please select a property");
+        return;
       }
+
+      const success =
+        isEditing && rateId
+          ? await updateRate(rateId, rateData)
+          : await createRate(selectedPropertyId, rateData);
+
+      if (success) onClose();
     },
-    [
-      selectedPropertyId,
-      showAlert,
-      createRate,
-      updateRate,
-      handleSubmitSuccess,
-    ],
+    [selectedPropertyId, createRate, updateRate, onClose],
   );
 
   const handleAutoSubmit = useCallback(
     async (data: Partial<AutoRateRequestType>) => {
-      console.log("Auto submit data", data);
-      if (selectedPropertyId) {
-        try {
-          await updateAutoRateSetting(data);
-          showAlert(
-            "success",
-            "Auto rate setting updated successfully",
-            "/dashboard/rates",
-          );
-        } catch (error: any) {
-          setError("Failed to update rate setting" + error.response.data);
-          console.error("Error updating rate setting:", error.response.data);
-          showAlert(
-            "error",
-            "Failed to update rate setting: " + error.response.data,
-          );
-        }
-        handleSubmitSuccess();
-      } else {
+      if (!selectedPropertyId) {
         setError("Please select a property");
+        return;
       }
+
+      const success = await updateAutoRateSetting(data);
+      if (success) onClose();
     },
-    [selectedPropertyId, showAlert, updateAutoRateSetting, handleSubmitSuccess],
+    [selectedPropertyId, updateAutoRateSetting, onClose],
   );
 
   return {
     selectedPropertyId,
-    error,
-    isLoading,
+    error: error || autoError || manualError,
+    isLoading: autoLoading || manualLoading,
     autoRateSetting,
     handlePropertyChange,
     handleManualSubmit,

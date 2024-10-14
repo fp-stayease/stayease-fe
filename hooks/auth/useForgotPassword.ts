@@ -1,22 +1,33 @@
 import { useState } from "react";
 import { useAlert } from "@/context/AlertContext";
-import authService from "@/services/authService";
 import { ForgotPasswordValues } from "@/constants/Auth";
 import { passwordService } from "@/services/passwordService";
+import { useSignOut } from "./useSignOut";
+import { useSession } from "next-auth/react";
 
 export const useForgotPassword = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isSuccess, setIsSuccess] = useState(false);
   const { showAlert } = useAlert();
+  const { handleSignOut } = useSignOut();
+  const { data: session } = useSession();
 
-  const forgotPassword = async (email: string): Promise<any> => {
+  const forgotPassword = async (email?: string): Promise<any> => {
     setIsLoading(true);
     setError(null);
     setIsSuccess(false);
 
     try {
-      const response = await passwordService.forgotPassword(email);
+      let response;
+      if (session) {
+        response = await passwordService.forgotPassword(
+          session.user.email,
+          true,
+        );
+      } else if (email) {
+        response = await passwordService.forgotPassword(email, false);
+      }
       setIsSuccess(true);
       showAlert(
         "success",
@@ -45,9 +56,11 @@ export const useForgotPassword = () => {
         passwordValues,
       );
       setIsSuccess(true);
+
+      await handleSignOut({ redirect: false });
       showAlert(
         "success",
-        "Password reset successful! Please log in.",
+        "Password reset successful! Please log back in with your new credentials.",
         "/login",
       );
       return response;

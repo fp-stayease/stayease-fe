@@ -14,16 +14,22 @@ export const useChangeEmail = () => {
     setIsLoading(true);
     setError(null);
     try {
-      await profileService.changeEmailRequest(email);
+      const response = await profileService.changeEmailRequest(email);
       showAlert(
         "success",
         "Email change request sent successfully, please check your email to verify the change.",
       );
+      console.log("response:", response);
+      return response;
     } catch (err: any) {
       handleError(
         err,
-        "Failed to send reset link. Please try again.",
+        "Failed to send email verification link. Please try again.",
         setError,
+      );
+      showAlert(
+        "error",
+        "Failed to send email verification link. Please try again.",
       );
       setError(err);
     } finally {
@@ -36,8 +42,8 @@ export const useChangeEmail = () => {
     setError(null);
     try {
       await profileService.verifyEmailChange(token);
-      showAlert("success", "Email change successful");
-      await handleSignOut({ redirect: true });
+      showAlert("success", "Email change successful", "/login");
+      await handleSignOut({ redirect: false });
     } catch (err: any) {
       handleError(
         err,

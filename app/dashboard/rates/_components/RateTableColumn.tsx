@@ -12,7 +12,16 @@ export const RateColumns: ColumnDef<RateResponseType>[] = [
   {
     id: "propertyName",
     accessorKey: "propertySummary.propertyName",
-    header: "Property",
+    header: ({ column }) => (
+      <Button
+        variant="ghost"
+        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        className="p-0"
+      >
+        Property
+        <ArrowUpDown className="ml-2 w-4 h-4" />
+      </Button>
+    ),
     cell: ({ row }) => {
       const propertyName = row.original.propertySummary.propertyName;
       return (

@@ -1,5 +1,5 @@
 import React from "react";
-import { Input } from "@/components/ui/input";
+import CurrencyInput from "@/components/CurrencyInput";
 
 interface BudgetInputProps {
   minPrice: number;
@@ -12,35 +12,28 @@ const BudgetInput: React.FC<BudgetInputProps> = ({
   maxPrice,
   onChange,
 }) => {
-  const handleMinChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = Math.max(0, parseInt(e.target.value) || 0);
-    onChange(value, maxPrice);
+  const handleMinChange = (name: string, value: number | null) => {
+    onChange(value ?? 0, maxPrice);
   };
 
-  const handleMaxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value =
-      e.target.value === ""
-        ? undefined
-        : Math.max(0, parseInt(e.target.value) || 0);
-    onChange(minPrice, value);
+  const handleMaxChange = (name: string, value: number | null) => {
+    onChange(minPrice, value ?? undefined);
   };
 
   return (
     <div className="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-2">
-      <Input
-        type="number"
-        placeholder="Min Price"
-        value={minPrice || ""}
+      <CurrencyInput
+        name="minPrice"
+        value={minPrice || null}
         onChange={handleMinChange}
-        className="w-full"
+        placeholder="Min Price"
       />
       <span className="text-gray-500">to</span>
-      <Input
-        type="number"
-        placeholder="Max Price"
-        value={maxPrice === undefined ? "" : maxPrice}
+      <CurrencyInput
+        name="maxPrice"
+        value={maxPrice || null}
         onChange={handleMaxChange}
-        className="w-full"
+        placeholder="Max Price"
       />
     </div>
   );

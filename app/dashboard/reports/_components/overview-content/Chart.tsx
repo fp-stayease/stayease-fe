@@ -3,6 +3,7 @@
 import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis } from "recharts"
 import {useMonthlySales} from "@/hooks/reports/useOverviewReports";
 import {currencyFormatter} from "@/utils/CurrencyFormatter";
+import ListLoading from "@/components/ListLoading";
 
 export function Chart() {
     const {
@@ -11,8 +12,10 @@ export function Chart() {
         monthlySalesError
     } = useMonthlySales();
 
-    if (monthlySalesIsLoading || !monthlySales) return <>Loading...</>
+    if (monthlySalesIsLoading) return <ListLoading/>
     if (monthlySalesError) return <>Something went wrong</>
+    if (!monthlySales) return <p className="text-gray-500">No data available</p>
+
     return (
         <ResponsiveContainer width="100%" height={350}>
             <BarChart data={monthlySales}>

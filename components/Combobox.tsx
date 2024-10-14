@@ -25,6 +25,8 @@ interface ComboboxProps {
   }[];
   onSelect: (value: string) => void;
   value?: string;
+  className?: string;
+  filterLabel?: boolean;
 }
 
 const Combobox: React.FC<ComboboxProps> = ({
@@ -32,6 +34,8 @@ const Combobox: React.FC<ComboboxProps> = ({
   choices,
   onSelect,
   value: externalValue,
+  className,
+  filterLabel,
 }) => {
   const [open, setOpen] = useState(false);
   const [internalValue, setInternalValue] = useState(externalValue || "");
@@ -41,6 +45,16 @@ const Combobox: React.FC<ComboboxProps> = ({
       setInternalValue(externalValue);
     }
   }, [externalValue]);
+
+  // opt for filtering by label instead of value
+  const filterChoices = (
+    choices: { value: string; label: string }[],
+    searchValue: string,
+  ) => {
+    return choices.filter((choice) =>
+      choice.label.toLowerCase().includes(searchValue.toLowerCase()),
+    );
+  };
 
   const handleSelect = (currentValue: string) => {
     const newValue = currentValue === internalValue ? "" : currentValue;
@@ -64,21 +78,23 @@ const Combobox: React.FC<ComboboxProps> = ({
           <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[200px] p-0">
+      <PopoverContent className={`${className ? className : "w-[200px] p-0"}`}>
         <Command>
           <CommandInput placeholder="Search choice..." className="h-9" />
           <CommandList>
             <CommandEmpty>No choice found.</CommandEmpty>
             <CommandGroup>
-              {choices.map((choice) => (
-                <CommandItem
-                  key={choice.value}
-                  value={choice.value}
-                  onSelect={handleSelect}
-                >
-                  {choice.label}
-                </CommandItem>
-              ))}
+              {(filterLabel ? filterChoices(choices, "") : choices).map(
+                (choice) => (
+                  <CommandItem
+                    key={choice.value}
+                    value={choice.label}
+                    onSelect={() => handleSelect(choice.value)}
+                  >
+                    {choice.label}
+                  </CommandItem>
+                ),
+              )}
             </CommandGroup>
           </CommandList>
         </Command>

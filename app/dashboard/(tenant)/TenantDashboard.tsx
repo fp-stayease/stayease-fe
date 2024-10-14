@@ -1,14 +1,6 @@
 import React from "react";
-import {
-  CalendarDays,
-  DollarSign,
-  Home,
-  MessageSquare,
-  Star,
-} from "lucide-react";
 import StatusGrid from "@/app/dashboard/(user)/_components/StatusGrid";
 import PropertyManagement from "@/app/dashboard/(tenant)/_components/PropertyManagement";
-import RecentActivity from "@/app/dashboard/(user)/_components/RecentActivity";
 import QuickActions from "@/app/dashboard/(user)/_components/QuickActions";
 import { useProfile } from "@/context/ProfileContext";
 import ProfileCard from "@/app/dashboard/(user)/_components/ProfileCard";
@@ -16,6 +8,7 @@ import { DashboardRatesSummary } from "@/app/dashboard/(tenant)/_components/Rate
 import GlobalLoading from "@/components/GlobalLoading";
 import ErrorComponent from "@/components/ErrorComponent";
 import { useReportStats } from "@/hooks/reports/useReportStats";
+import { tenantDashboardActions } from "@/constants/Routes";
 
 const TenantDashboard: React.FC = () => {
   const { profile, isLoading, error } = useProfile();
@@ -32,22 +25,6 @@ const TenantDashboard: React.FC = () => {
     return <ErrorComponent message={error.message} fullPage />;
   }
 
-  // TODO : Replace with real data
-  const actions = [
-    {
-      icon: <CalendarDays className="h-4 w-4" />,
-      label: "View Calendar",
-    },
-    {
-      icon: <MessageSquare className="h-4 w-4" />,
-      label: "Inbox",
-    },
-    {
-      icon: <DollarSign className="h-4 w-4" />,
-      label: "Financial Reports",
-    },
-  ];
-
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold mb-6 text-blue-950">
@@ -55,11 +32,17 @@ const TenantDashboard: React.FC = () => {
       </h1>
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         <ProfileCard className="col-span-1" user={profile} />
-        <StatusGrid className="col-span-1 md:col-span-3" stats={statsList} />
+        <StatusGrid
+          className="col-span-1 md:col-span-2"
+          stats={statsList}
+          title="Performance Overview"
+        />
+        <QuickActions
+          actions={tenantDashboardActions}
+          className="col-span-1 md:col-span-1"
+        />
         <DashboardRatesSummary className="w-full col-span-1 md:col-span-2" />
         <PropertyManagement className="col-span-1 md:col-span-2" />
-        <RecentActivity className="col-span-1 md:col-span-3" />
-        <QuickActions actions={actions} className="col-span-1" />
       </div>
     </div>
   );

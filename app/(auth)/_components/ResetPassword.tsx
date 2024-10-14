@@ -5,6 +5,7 @@ import { useForgotPassword } from "@/hooks/auth/useForgotPassword";
 import { Button } from "@/components/ui/button";
 import { getValidationSchema } from "@/constants/ValidationSchema";
 import FormInputs from "@/app/(auth)/_components/FormInputs";
+import LoadingButton from "@/components/LoadingButton";
 
 interface ResetPasswordProps {
   token: string;
@@ -18,10 +19,6 @@ const ResetPassword: React.FC<ResetPasswordProps> = ({ token }) => {
       router.push("/login");
     }
   }, [token, router]);
-
-  if (!token) {
-    return null;
-  }
 
   return (
     <div className="container mx-auto p-4 max-w-md">
@@ -42,13 +39,16 @@ const ResetPassword: React.FC<ResetPasswordProps> = ({ token }) => {
               <FormInputs formType="forgotPassword" />
             </div>
             {error && <div className="text-red-500 text-sm">{error}</div>}
-            <Button
-              type="submit"
-              disabled={isSubmitting || isLoading}
-              className="w-full bg-blue-950 text-white hover:bg-blue-900"
-            >
-              {isSubmitting || isLoading ? "Resetting..." : "Reset Password"}
-            </Button>
+            {isSubmitting || isLoading ? (
+              <LoadingButton title="Resetting password..." />
+            ) : (
+              <Button
+                type="submit"
+                className="w-full bg-blue-950 text-white hover:bg-blue-900"
+              >
+                Reset Password
+              </Button>
+            )}
           </Form>
         )}
       </Formik>

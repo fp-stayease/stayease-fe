@@ -1,6 +1,6 @@
 "use client";
 import * as React from "react";
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import Autoplay from "embla-carousel-autoplay";
 import {
   Carousel,
@@ -18,35 +18,14 @@ interface CarouselPluginProps {
 }
 
 export function CarouselPlugin({ className, images }: CarouselPluginProps) {
-  const plugin = useRef(Autoplay({ delay: 2000, stopOnInteraction: true }));
-  const [activeIndex, setActiveIndex] = useState(0);
-
-  // const handleSlideChange = () => {
-  //   if (emblaApi) {
-  //     setActiveIndex(emblaApi.selectedScrollSnap());
-  //     console.log("index:" + index);
-  //   }
-  // };
-  //
-  // useEffect(() => {
-  //   if (emblaApi) {
-  //     emblaApi.on("select", handleSlideChange);
-  //     // Add event listener for slide change
-  //   }
-  //
-  //   return () => {
-  //     if (emblaApi) {
-  //       emblaApi.off("select", handleSlideChange); // Cleanup event listener
-  //     }
-  //   };
-  // }, [emblaApi]);
+  const plugin = useRef(Autoplay({ delay: 3000 }));
 
   return (
     <Carousel
       plugins={[plugin.current]}
       className={`carousel relative w-full h-full ${className}`}
-      onMouseEnter={plugin.current.stop}
-      onMouseLeave={plugin.current.reset}
+      onMouseEnter={() => plugin.current.stop()}
+      onMouseLeave={() => plugin.current.play()}
     >
       <CarouselContent>
         {images.map((image, index) => (
@@ -58,21 +37,12 @@ export function CarouselPlugin({ className, images }: CarouselPluginProps) {
                 width={480}
                 height={480}
                 className="w-full h-full object-cover"
+                priority
               />
             </div>
           </CarouselItem>
         ))}
       </CarouselContent>
-
-      {/*TODO :indicators?*/}
-      {/*<div className="absolute z-20 top-1/2 right-4 transform -translate-y-1/2 flex flex-col space-y-2">*/}
-      {/*  {images.map((_, index) => (*/}
-      {/*    <div*/}
-      {/*      key={index}*/}
-      {/*      className={`w-3 h-3 rounded-full ${index === activeIndex ? "bg-blue-950" : "bg-gray-300"}`}*/}
-      {/*    />*/}
-      {/*  ))}*/}
-      {/*</div>*/}
     </Carousel>
   );
 }

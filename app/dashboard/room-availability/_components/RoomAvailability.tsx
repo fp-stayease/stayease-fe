@@ -1,23 +1,22 @@
 "use client";
 import React, { useState } from "react";
-import { useRoomAvailability } from "@/hooks/reports/useRoomAvailability";
 import AvailabilityDialog from "./AvailabilityDialog";
 import { Button } from "@/components/ui/button";
 import RoomAvailabilityCalendar from "@/app/dashboard/room-availability/_components/RoomAvailabilityCalendar";
 import ConfirmationDialog from "@/app/dashboard/room-availability/_components/ConfirmationDialog";
 import { useAlert } from "@/context/AlertContext";
 import GlobalLoading from "@/components/GlobalLoading";
-import ErrorComponent from "@/components/ErrorComponent";
 import InstructionPopover from "@/app/dashboard/room-availability/_components/CalendarInstruction";
+import { useRoomAvailabilityContext } from "@/context/RoomAvailabilityContext";
 
 const RoomAvailability: React.FC = () => {
   const {
     availabilityData,
-    isLoading,
+    dataLoading,
     error,
     setAvailability,
     removeAvailability,
-  } = useRoomAvailability();
+  } = useRoomAvailabilityContext();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
   const [selectedDates, setSelectedDates] = useState<{
@@ -27,26 +26,20 @@ const RoomAvailability: React.FC = () => {
   const [selectedEvent, setSelectedEvent] = useState<any>(null);
   const { showAlert } = useAlert();
 
-  const handleOpenDialog = () => {
-    setIsDialogOpen(true);
-  };
-
-  const handleCloseDialog = () => {
-    setIsDialogOpen(false);
-  };
-
   const handleDateSelect = (start: Date, end: Date) => {
     setSelectedDates({ start, end });
     setIsDialogOpen(true);
   };
 
-  const handleSubmitNewAvailability = (
+  const handleSubmitNewAvailability = async (
     roomId: number,
     startDate: Date,
     endDate: Date,
   ) => {
-    setAvailability(roomId, startDate, endDate);
-    setIsDialogOpen(false);
+    const success = await setAvailability(roomId, startDate, endDate);
+    if (success && !error) {
+      setIsDialogOpen(false);
+    }
   };
 
   const handleEventClick = (event: any) => {
@@ -61,9 +54,9 @@ const RoomAvailability: React.FC = () => {
     }
   };
 
-  const handleConfirmRemove = () => {
+  const handleConfirmRemove = async () => {
     if (selectedEvent) {
-      removeAvailability(
+      await removeAvailability(
         selectedEvent.extendedProps.roomId,
         parseInt(selectedEvent.id),
       );
@@ -72,12 +65,8 @@ const RoomAvailability: React.FC = () => {
     setSelectedEvent(null);
   };
 
-  if (!availabilityData || isLoading) {
-    return (
-      <div className="flex items-center justify-center align-middle h-[200px]">
-        <GlobalLoading height={100} width={100} />
-      </div>
-    );
+  if (!availabilityData || dataLoading) {
+    return <GlobalLoading height={100} width={100} />;
   }
 
   return (
@@ -87,7 +76,7 @@ const RoomAvailability: React.FC = () => {
         <InstructionPopover />
       </div>
       <Button
-        onClick={handleOpenDialog}
+        onClick={() => setIsDialogOpen(true)}
         className="bg-blue-950 text-appgray hover:bg-gray-400 hover:text-blue-950 my-5"
       >
         Set Availability
@@ -99,7 +88,7 @@ const RoomAvailability: React.FC = () => {
       />
       <AvailabilityDialog
         isOpen={isDialogOpen}
-        onClose={handleCloseDialog}
+        onClose={() => setIsDialogOpen(false)}
         onSubmit={handleSubmitNewAvailability}
         preSelectedDates={selectedDates}
       />

@@ -5,26 +5,18 @@ import axios from "axios";
 import { ForgotPasswordValues, TokenCheckResponse } from "@/constants/Auth";
 
 export const passwordService = {
-  forgotPassword: async (email: string): Promise<any> => {
+  forgotPassword: async (email: string, loggedIn: boolean): Promise<any> => {
     try {
       const res = await axiosInterceptor.post(
         config.endpoints.password.forgot,
         { email },
+        { params: { loggedIn } },
       );
       logger.info("Forgot password request sent", { email });
       return res.data;
     } catch (error: any) {
-      try {
-        const response = await axios.post(
-          `${config.BASE_URL}${config.endpoints.password.forgot}`,
-          { email },
-        );
-        logger.info("Unlogged user requesting for forgot password", { email });
-        return response.data;
-      } catch (error: any) {
-        logger.error("Forgot password failed", { error, email });
-        throw error;
-      }
+      logger.error("Forgot password failed", { error, email });
+      throw error;
     }
   },
 

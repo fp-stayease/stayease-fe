@@ -74,7 +74,7 @@ const RoomDetailsComponent: React.FC<RoomDetailsProps> = ({ room }) => {
     await router.push(
       `/book?checkInDate=${bookingValues.checkInDate}&checkOutDate=${bookingValues.checkOutDate}&roomId=${room.roomId}&propertyId=${room.propertyId}&totalAdults=1`,
     );
-  }, [room.roomId, bookingValues, router]);
+  }, [room.roomId, room.propertyId, bookingValues, router]);
 
   const priceInfo = useMemo(() => {
     const priceChange = room.adjustedPrice - room.basePrice;
@@ -93,8 +93,8 @@ const RoomDetailsComponent: React.FC<RoomDetailsProps> = ({ room }) => {
               src={room.imageUrl || "/api/placeholder/800/400"}
               alt={room.roomName}
               fill
-              objectFit="cover"
-              className="rounded-lg"
+              sizes="100%"
+              className="rounded-lg object-cover"
             />
           </div>
 

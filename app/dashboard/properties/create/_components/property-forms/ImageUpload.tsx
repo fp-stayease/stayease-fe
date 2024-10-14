@@ -64,7 +64,13 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
         )}
         {field.value && (
           <div className="mt-2 relative w-full h-40">
-            <Image src={field.value} alt="Preview" fill objectFit="contain" />
+            <Image
+              src={field.value}
+              alt="Preview"
+              fill
+              sizes="100%"
+              className="object-contain"
+            />
           </div>
         )}
         <ErrorMessage

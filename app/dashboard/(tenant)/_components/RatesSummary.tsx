@@ -16,7 +16,7 @@ interface DashboardRatesSummaryProps {
 export const DashboardRatesSummary: React.FC<DashboardRatesSummaryProps> = ({
   className,
 }) => {
-  const { rates, isLoading, error } = usePeakSeasonRate();
+  const { rates, isLoading } = usePeakSeasonRate();
   const [manualRates, setManualRates] = useState<RateResponseType[]>([]);
   const [automaticRates, setAutomaticRates] = useState<RateResponseType[]>([]);
 
