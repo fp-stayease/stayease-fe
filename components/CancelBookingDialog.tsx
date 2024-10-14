@@ -1,3 +1,5 @@
+"use client";
+
 import {FC} from "react";
 import {
     Dialog, DialogClose,
@@ -9,15 +11,26 @@ import {
 } from "@/components/ui/dialog";
 import {Button} from "@/components/ui/button";
 import {transactionService} from "@/services/transactionService";
+import {useQueryClient} from "@tanstack/react-query";
+import {usePathname} from "next/navigation";
 
 interface CancelBookingDialogProps {
     bookingId: string;
+    queryKey: string;
 }
 
-const CancelBookingDialog: FC<CancelBookingDialogProps> = ({ bookingId }) => {
+const CancelBookingDialog: FC<CancelBookingDialogProps> = ({ bookingId, queryKey }) => {
+    const queryClient = useQueryClient();
+    const pathname = usePathname();
+
     const handleCancel = async () => {
         try {
-            await transactionService.userCancelTrx(bookingId);
+            if (pathname.includes("dashboard")) {
+                await transactionService.tenantCancelTrx(bookingId);
+            } else {
+                await transactionService.userCancelTrx(bookingId);
+            }
+            await queryClient.invalidateQueries({queryKey: [queryKey]})
         } catch (error) {
             console.log(error);
         }
@@ -37,7 +50,7 @@ const CancelBookingDialog: FC<CancelBookingDialogProps> = ({ bookingId }) => {
                 <DialogDescription>
                     Are you sure you want to cancel this booking?
                 </DialogDescription>
-                <div>
+                <div className="w-full flex items-center justify-end">
                     <DialogClose asChild>
                         <Button
                             variant="link"

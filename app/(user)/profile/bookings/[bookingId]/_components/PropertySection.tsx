@@ -36,7 +36,7 @@ const PropertySection: FC<PropertySectionProps> = ({booking}) => {
                     <div className="flex items-center gap-2">
                         <Star className="text-blue-950 w-4 h-4" />
                         <p className="text-blue-950 text-sm">
-                            {propertyRating?.avgRating?.toFixed(1)} Ratings
+                            {propertyRating?.avgRating?.toFixed(1) ?? 0.0} Ratings
                         </p>
                     </div>
                 </div>

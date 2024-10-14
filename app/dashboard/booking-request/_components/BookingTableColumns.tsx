@@ -14,6 +14,7 @@ import PaymentProofDialog from "@/app/dashboard/booking-request/_components/Paym
 import PaymentActionDialog from "@/app/dashboard/booking-request/_components/PaymentActionDialog";
 import {dateFormater} from "@/utils/dateFormatter";
 import DetailButton from "@/app/dashboard/booking-request/_components/DetailButton";
+import CancelBookingDialog from "@/components/CancelBookingDialog";
 
 export const columns: ColumnDef<BookingDataType>[] = [
     {
@@ -141,6 +142,10 @@ export const columns: ColumnDef<BookingDataType>[] = [
                                     <PaymentActionDialog bookingId={bookingId} isApproval={true} />
                                     <PaymentActionDialog bookingId={bookingId} isApproval={false}/>
                                 </div>
+                        }
+                        {
+                            paymentStatus === "PENDING" || paymentStatus === "IN_PROGRESS" &&
+                            <CancelBookingDialog bookingId={bookingId} queryKey="get-tenant-bookings" />
                         }
                     </DropdownMenuContent>
                 </DropdownMenu>

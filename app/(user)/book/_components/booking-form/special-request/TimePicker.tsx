@@ -1,5 +1,3 @@
-"use client"
-
 import * as React from "react"
 import { format } from "date-fns"
 import { cn } from "@/lib/utils"
@@ -24,14 +22,20 @@ const TimePicker: React.FC<TimePickerProps> = ({ name, label }) => {
     const hours = Array.from({ length: 24 }, (_, i) => i.toString().padStart(2, '0'));
     const minutes = Array.from({ length: 60 }, (_, i) => i.toString().padStart(2, '0'));
 
-    const handleTimeChange = async (type: 'hour' | 'minute', value: string) => {
-        const currentTime = field.value ? new Date(field.value) : new Date();
+    const handleTimeChange = (type: 'hour' | 'minute', value: string) => {
+        const [currentHour, currentMinute] = (field.value || '00:00').split(':');
+        let newHour = currentHour;
+        let newMinute = currentMinute;
+
         if (type === 'hour') {
-            currentTime.setHours(parseInt(value));
+            newHour = value;
         } else {
-            currentTime.setMinutes(parseInt(value));
+            newMinute = value;
         }
-        await helpers.setValue(currentTime);
+
+        const newTime = `${newHour}:${newMinute}`;
+        helpers.setValue(newTime);
+        console.log(newTime);
     };
 
     return (
@@ -45,7 +49,7 @@ const TimePicker: React.FC<TimePickerProps> = ({ name, label }) => {
                     )}
                 >
                     <ClockIcon className="mr-2 h-4 w-4" />
-                    {field.value ? format(new Date(field.value), "HH:mm") : <span>{label}</span>}
+                    {field.value || <span>{label}</span>}
                 </Button>
             </PopoverTrigger>
             <PopoverContent className="w-auto p-0" align="start">
