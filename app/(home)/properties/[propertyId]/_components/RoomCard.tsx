@@ -21,7 +21,7 @@ const RoomCard: React.FC<RoomCardProps> = ({ room, isAvailable }) => {
 
   return (
     <Card
-      className={`mb-6 transition-all duration-300 hover:shadow-lg ${!isAvailable ? "opacity-70" : ""}`}
+      className={`mb-6 ${!isAvailable ? "opacity-70" : "transition-all duration-300 hover:shadow-lg"}`}
     >
       <CardContent className="p-0">
         <div className="flex flex-col md:flex-row">
