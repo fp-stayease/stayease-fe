@@ -44,7 +44,7 @@ const BookingList = () => {
                         Load more
                     </Button>
             }
-            { isFetchingNextPage && <>Loading...</> }
+            { isFetchingNextPage && <ListLoading /> }
         </div>
     );
 };

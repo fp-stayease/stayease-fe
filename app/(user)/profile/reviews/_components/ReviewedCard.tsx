@@ -10,6 +10,7 @@ import {dateFormater} from "@/utils/dateFormatter";
 import {currencyFormatter} from "@/utils/CurrencyFormatter";
 import {useReviewReplies} from "@/hooks/reviews/useReplies";
 import ShowReplyBtn from "@/components/ShowReplyBtn";
+import DeleteReviewDialog from "@/components/DeleteReviewDialog";
 
 interface ReviewedCardProps {
     review: ReviewType;
@@ -27,13 +28,16 @@ const ReviewedCard: FC<ReviewedCardProps> = ({ review }) => {
                 <div className="w-full flex flex-col gap-2">
                     <div className="w-full flex items-center justify-between">
                         <p className="text-xs text-blue-950 text-opacity-50">Booking ID: {booking.id}</p>
-                        <Button
-                            variant="ghost"
-                            className="p-1 h-max"
-                            onClick={() => setEditState(!isEditState)}
-                        >
-                            <PencilLine className="w-4 h-4" />
-                        </Button>
+                        <div>
+                            <Button
+                                variant="ghost"
+                                className="p-1 h-max"
+                                onClick={() => setEditState(!isEditState)}
+                            >
+                                <PencilLine className="w-4 h-4" />
+                            </Button>
+                            <DeleteReviewDialog reviewId={review.id} />
+                        </div>
                     </div>
                     <div className="w-full flex flex-col xl:flex-row gap-3 lg:gap-1">
                         <div className="w-full xl:w-1/2 flex flex-col gap-2">

@@ -4,9 +4,10 @@ import {Line, LineChart, ResponsiveContainer, XAxis, YAxis} from "recharts";
 import {useDailySales} from "@/hooks/reports/usePropertiesReport";
 import {currencyFormatter} from "@/utils/CurrencyFormatter";
 import {useReportParams} from "@/hooks/reports/useReportParams";
+import ListLoading from "@/components/ListLoading";
 
 const SalesChart = () => {
-    const { reportParams } = useReportParams();
+    const {reportParams} = useReportParams();
     const {
         dailySales,
         dailySalesIsLoading,
@@ -15,8 +16,9 @@ const SalesChart = () => {
 
     console.log(reportParams.month)
 
-    if (dailySalesIsLoading || !dailySales) return <>Loading...</>
+    if (dailySalesIsLoading) return <ListLoading/>
     if (dailySalesError) return <>Something went wrong</>
+    if (!dailySales) return <p className="text-gray-500">No data available</p>
 
     return (
         <ResponsiveContainer width="100%" height={350}>

@@ -2,6 +2,7 @@
 
 import {useRecentTrx} from "@/hooks/reports/useOverviewReports";
 import UserSalesCard from "@/app/dashboard/reports/_components/overview-content/UserSalesCard";
+import ListLoading from "@/components/ListLoading";
 
 export function RecentSales() {
     const {
@@ -10,10 +11,10 @@ export function RecentSales() {
         recentTrxError
     } = useRecentTrx();
 
-    if (recentTrxIsLoading || !recentTrx) return <>Loading...</>
+    if (recentTrxIsLoading) return <ListLoading />
     if (recentTrxError) return <>Something went wrong</>
+    if (!recentTrx) return <p className="text-gray-500">No data available</p>
 
-    console.log(recentTrx);
     return (
         <div className="space-y-8">
             {

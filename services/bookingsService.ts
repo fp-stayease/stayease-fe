@@ -33,5 +33,14 @@ export const bookingsService = {
             console.log(error);
             throw error;
         }
+    },
+    getUpcomingBookings: async (): Promise<BookingDataType[]> => {
+        try {
+            const {data} = await axiosInterceptor.get(config.endpoints.bookings.upcomingBookings);
+            return data.data;
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
     }
 };
