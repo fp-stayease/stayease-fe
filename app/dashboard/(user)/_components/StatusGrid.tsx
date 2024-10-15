@@ -23,7 +23,7 @@ const StatusGrid: React.FC<StatusGridProps> = ({ className, stats, title }) => {
         <CardDescription>Your activity on the platform</CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid md:grid-cols-2 grid-cols-1 gap-4">
           {stats.map((stat, index) => {
             const { icon: Icon } = stat;
             return (
