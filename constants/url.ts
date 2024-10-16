@@ -83,7 +83,7 @@ export const config = {
       upcomingBookings: "/bookings/upcoming-bookings"
     },
     transactions: {
-      tenant: "/transactions",
+      tenant: "/transactions/tenant",
       user: "/transactions/user",
     },
     payments: {

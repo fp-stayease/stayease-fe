@@ -22,6 +22,7 @@ import {
 } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
 import useMediaQuery from "@/hooks/utils/useMediaQuery";
+import ListLoading from "@/components/ListLoading";
 
 interface DataTableProps<TData, TValue> {
   data: TData[];
@@ -69,7 +70,7 @@ function DataTable<TData, TValue>({
 
   const isMobile = useMediaQuery("(max-width: 768px)");
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <ListLoading />;
 
   return (
     <div className="w-full flex flex-col gap-5">

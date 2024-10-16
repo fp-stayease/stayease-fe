@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { whiteSpaceRegex } from "@/constants/WhiteSpaceRegex";
 import { useRouter } from "next/navigation";
 import { useBookingValues } from "@/hooks/transactions/useBookingValues";
-import {FC} from "react";
+import {FC, useState} from "react";
 import { calculateDaysBetweenDates } from "@/utils/datesDifference";
 import { transactionService } from "@/services/transactionService";
 import {priceCalculator} from "@/utils/priceCalculator";
@@ -16,6 +16,8 @@ import SpecialRequest from "@/app/(user)/book/_components/booking-form/special-r
 import PaymentMethodForm from "@/app/(user)/book/_components/booking-form/payment-method/PaymentMethodForm";
 import CancellationPolicy from "@/app/(user)/book/_components/booking-form/CancellationPolicy";
 import ListLoading from "@/components/ListLoading";
+import {useQueryClient} from "@tanstack/react-query";
+import {Loader2} from "lucide-react";
 
 interface BookingFormProps {
     checkInDate: string;
@@ -26,6 +28,8 @@ interface BookingFormProps {
 
 const BookingForm: FC<BookingFormProps> = ({checkInDate, checkOutDate, roomId, propertyId}) => {
     const router = useRouter();
+    const queryClient = useQueryClient();
+    const [loading, setLoading] = useState<boolean>(false);
 
     const {bookingValues} = useBookingValues();
     const {roomPrice, isAvailable, isLoading, error} =
@@ -36,11 +40,12 @@ const BookingForm: FC<BookingFormProps> = ({checkInDate, checkOutDate, roomId, p
     if (!isAvailable) return <>We are very sorry. Room not available for the selected date</>
 
     const daysDiff = calculateDaysBetweenDates(checkInDate, checkOutDate);
-    console.log(roomPrice);
+
+    const timeRegex = /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/;
 
     const bookingSchema = yup.object().shape({
-        checkInTime: yup.date().nullable(),
-        checkOutTime: yup.date().nullable(),
+        checkInTime: yup.string().matches(timeRegex, "Invalid time format. Use HH:mm").nullable(),
+        checkOutTime: yup.string().matches(timeRegex, "Invalid time format. Use HH:mm").nullable(),
         nonSmokingRoom: yup.boolean(),
         other: yup
             .string()
@@ -61,6 +66,7 @@ const BookingForm: FC<BookingFormProps> = ({checkInDate, checkOutDate, roomId, p
     };
 
     const handleBooking = async (value: FormikValues) => {
+        setLoading(true);
         try {
             const bookingItem = {
                 extendingUntil: null,
@@ -100,8 +106,11 @@ const BookingForm: FC<BookingFormProps> = ({checkInDate, checkOutDate, roomId, p
             );
 
             router.push(`/payment?id=${data.bookingId}`);
+            await queryClient.invalidateQueries({queryKey: ['get-user-bookings', 'get-payment-info', 'get-tenant-bookings']});
         } catch (error) {
             console.log(error);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -124,8 +133,9 @@ const BookingForm: FC<BookingFormProps> = ({checkInDate, checkOutDate, roomId, p
                             type="submit"
                             className="bg-blue-950 text-white"
                             onClick={() => console.log("Button clicked")}
+                            disabled={loading}
                         >
-                            Pay and Continue
+                            {loading && <Loader2 className="w-4 h-4 animate-spin" />} Pay and Continue
                         </Button>
                     </Form>
                 )}
