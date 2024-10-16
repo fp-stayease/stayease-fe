@@ -1,12 +1,13 @@
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import CustomSelect from "@/components/CustomSelect";
 import { ManualRateForm } from "./ManualRateForm";
 import { AutomaticRateForm } from "./AutomaticRateForm";
 import { RateResponseType } from "@/constants/Rates";
 import { useTenantProperties } from "@/hooks/properties/useTenantProperties";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useRatesManagement } from "@/hooks/rates/useRatesManagement";
+import { Formik, Form } from "formik";
+import PropertySelector from "@/app/dashboard/room-availability/_components/PropertySelector";
 
 interface RatesManagementProps {
   isEditing: boolean;
@@ -33,12 +34,6 @@ export const RatesManagement: React.FC<RatesManagementProps> = ({
     isEditing ? selectedRate?.propertySummary.propertyId : undefined,
   );
 
-  const propertyOptions =
-    properties?.map((property) => ({
-      value: property.id.toString(),
-      label: property.propertyName,
-    })) || [];
-
   return (
     <Card className="w-full">
       <CardHeader>
@@ -48,15 +43,20 @@ export const RatesManagement: React.FC<RatesManagementProps> = ({
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
-          <div className="flex flex-col space-y-2 mb-4">
-            <CustomSelect
-              title="Select Property"
-              options={propertyOptions}
-              onChange={handlePropertyChange}
-              value={selectedPropertyId?.toString()}
-              disabled={isEditing}
-            />
-          </div>
+          <Formik
+            initialValues={{ propertyId: selectedPropertyId?.toString() || "" }}
+            onSubmit={() => {}}
+          >
+            <Form>
+              <div className="flex flex-col space-y-2 mb-4">
+                <PropertySelector
+                  properties={properties}
+                  value={selectedPropertyId?.toString() || ""}
+                  onChange={handlePropertyChange}
+                />
+              </div>
+            </Form>
+          </Formik>
           <Tabs defaultValue="manual">
             <TabsList>
               <TabsTrigger value="manual">Manual Rate</TabsTrigger>

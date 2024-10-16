@@ -1,5 +1,5 @@
 import React from "react";
-import { ErrorMessage } from "formik";
+import { ErrorMessage, useFormikContext } from "formik";
 import { Label } from "@/components/ui/label";
 import Combobox from "@/components/Combobox";
 import { PropertyAndRoomType } from "@/constants/Property";
@@ -15,6 +15,7 @@ const PropertySelector: React.FC<PropertySelectorProps> = ({
   value,
   onChange,
 }) => {
+  const formik = useFormikContext();
   const sortedProperties = properties
     ?.slice()
     .sort((a, b) => a.propertyName.localeCompare(b.propertyName));
@@ -34,11 +35,13 @@ const PropertySelector: React.FC<PropertySelectorProps> = ({
         value={value}
         className="w-full"
       />
-      <ErrorMessage
-        name="propertyId"
-        component="div"
-        className="text-red-500 text-sm"
-      />
+      {formik && (
+        <ErrorMessage
+          name="propertyId"
+          component="div"
+          className="text-red-500 text-sm"
+        />
+      )}
     </div>
   );
 };
