@@ -81,7 +81,7 @@ export const contactFormValidationSchema = yup.object().shape({
   message: yup
     .string()
     .required("Message is required")
-    .min(255, "Message must be at least 25 characters")
+    .min(255, "Message must be at least 255 characters")
     .max(1000, "Message must not exceed 1000 characters"),
 });
 

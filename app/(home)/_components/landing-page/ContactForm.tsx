@@ -27,8 +27,6 @@ const ContactForm = () => {
       message: sanitizeInput(values.message),
     };
 
-    console.log(sanitizedValues);
-
     setIsDialogOpen(true);
     setSubmitting(false);
     resetForm();
