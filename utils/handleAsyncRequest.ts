@@ -1,4 +1,6 @@
 // * Utility function to handle asynchronous requests
+import logger from "@/utils/logger";
+
 /** params:
 setIsLoading: function to set loading state
 setError: function to set error state
@@ -25,7 +27,7 @@ export const handleAsyncRequest = async <T>(
     }
     return result;
   } catch (err: any) {
-    console.error(err);
+    logger.error(err);
     setError(err.message);
     if (errorAlert) {
       errorAlert(err);

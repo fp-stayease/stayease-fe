@@ -31,7 +31,6 @@ export const profileService = {
     const response = await axiosInterceptor.get<UserProfile>(
       config.endpoints.users.profile,
     );
-    console.log("fetching profile:", response.data);
     return transformUserProfile(response.data);
   },
 
@@ -72,7 +71,6 @@ export const profileService = {
         },
       },
     );
-    console.log("response from profileService.uploadAvatar:", response);
     return response.data.data.avatarUrl;
   },
 
@@ -90,7 +88,6 @@ export const profileService = {
         config.endpoints.users.avatar,
         { avatarUrl: userImage.avatarUrl },
       );
-      console.log("response from profileService.setOrRemoveAvatar:", response);
       if (!response.data || !response.data.data.avatarUrl) {
         throw new Error("Failed to set avatar");
       }

@@ -29,13 +29,13 @@ const logger =
     : {
         info: () => {},
         error: () => {},
-        warn: () => {},
-        debug: (message: string, meta?: object) => {
-          console.debug(
-            `[DEBUG] ${message}`,
+        warn: (message: string, meta?: object) => {
+          console.warn(
+            `[WARN] ${message}`,
             meta ? JSON.stringify(meta, null, 2) : "",
           );
         },
+        debug: () => {},
       };
 
 export default logger;

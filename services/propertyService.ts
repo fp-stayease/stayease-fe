@@ -252,7 +252,7 @@ const propertyService = {
       );
       return response.data.data;
     } catch (error: any) {
-      console.error(
+      logger.error(
         "Failed to create new category:",
         error.response.data.message,
       );

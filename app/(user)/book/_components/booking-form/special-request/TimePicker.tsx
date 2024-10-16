@@ -1,3 +1,5 @@
+"use client"
+
 import * as React from "react"
 import { format } from "date-fns"
 import { cn } from "@/lib/utils"
@@ -35,7 +37,6 @@ const TimePicker: React.FC<TimePickerProps> = ({ name, label }) => {
 
         const newTime = `${newHour}:${newMinute}`;
         helpers.setValue(newTime);
-        console.log(newTime);
     };
 
     return (

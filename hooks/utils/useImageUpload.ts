@@ -2,6 +2,7 @@ import { useCallback, useState } from "react";
 import propertyService from "@/services/propertyService";
 import { profileService } from "@/services/profileService";
 import { useAlert } from "@/context/AlertContext";
+import logger from "@/utils/logger";
 
 type ImageUploaderType = "profile" | "property";
 export const useImageUpload = (type: ImageUploaderType) => {
@@ -28,7 +29,7 @@ export const useImageUpload = (type: ImageUploaderType) => {
         showAlert("success", "Image uploaded successfully");
         return imageUrl;
       } catch (error) {
-        console.error("Error uploading image: ", error);
+        logger.error("Error uploading image: ", { error });
         setError("Failed to upload image");
         showAlert("error", "Failed to upload image");
         throw error;

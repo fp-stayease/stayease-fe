@@ -13,6 +13,7 @@ import { useForgotPassword } from "@/hooks/auth/useForgotPassword";
 import { useChangeEmail } from "@/hooks/auth/useChangeEmail";
 import LoadingButton from "@/components/LoadingButton";
 import { useSession } from "next-auth/react";
+import logger from "@/utils/logger";
 
 interface ChangeCredentialModalProps {
   isOpen: boolean;
@@ -50,7 +51,7 @@ const ChangeCredentialModal: React.FC<ChangeCredentialModalProps> = ({
         onClose();
       }
     } catch (err) {
-      console.error("Error submitting form:", err);
+      logger.error("Error submitting form:", { err });
     }
   };
 
