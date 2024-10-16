@@ -18,7 +18,7 @@ export const availabilityService = {
       if (error.response.status === 404) {
         return [];
       }
-      console.error("Error fetching tenant room availability", error);
+      logger.error("Error fetching tenant room availability", error);
       throw error.response.data;
     }
   },

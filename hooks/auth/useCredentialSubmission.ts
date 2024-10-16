@@ -4,6 +4,7 @@ import { FormikHelpers, FormikValues } from "formik";
 import { signIn } from "next-auth/react";
 import { useAlert } from "@/context/AlertContext";
 import authService from "@/services/authService";
+import logger from "@/utils/logger";
 
 export const useCredentialSubmission = (userType: UserType) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -25,7 +26,7 @@ export const useCredentialSubmission = (userType: UserType) => {
       const errorMessage = "An error occurred, please try logging in again";
       setError(errorMessage);
       showAlert("error", errorMessage);
-      console.error("Error details:", error);
+      logger.error("Error details:", error);
     }
   };
 
@@ -36,7 +37,7 @@ export const useCredentialSubmission = (userType: UserType) => {
     } catch (error: any) {
       setError(error.message);
       showAlert("error", error.message);
-      console.error("Error details:", error.response?.data);
+      logger.error("Error details:", error.response?.data);
     }
   };
 

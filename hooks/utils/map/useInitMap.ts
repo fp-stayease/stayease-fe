@@ -1,4 +1,5 @@
 import { useCallback, useRef } from "react";
+import logger from "@/utils/logger";
 
 interface InitMapConfig {
   initialCenter: google.maps.LatLngLiteral;
@@ -21,7 +22,7 @@ export const useInitMap = ({
 
     const mapElement = document.getElementById("map");
     if (!mapElement) {
-      console.error("Map element not found");
+      logger.error("Map element not found");
       return;
     }
     mapRef.current = new window.google.maps.Map(
@@ -103,11 +104,11 @@ const addLocationButton = (
             mapRef.current?.setCenter(pos);
           },
           () => {
-            console.error("Error: The Geolocation service failed.");
+            logger.error("Error: The Geolocation service failed.");
           },
         );
       } else {
-        console.error("Error: Your browser doesn't support geolocation.");
+        logger.error("Error: Your browser doesn't support geolocation.");
       }
     });
   }

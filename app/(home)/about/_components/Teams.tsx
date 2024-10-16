@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import Image from "next/image";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import logger from "@/utils/logger";
 
 interface TeamMember {
   name: string;
@@ -25,7 +25,7 @@ const Teams: React.FC = () => {
         );
         setTeam(formattedTeam);
       } catch (error) {
-        console.error("Error fetching team data:", error);
+        logger.error("Error fetching team data:", { error });
       }
     };
 

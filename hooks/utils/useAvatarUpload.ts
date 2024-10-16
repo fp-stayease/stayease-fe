@@ -1,5 +1,6 @@
 import { useProfile } from "@/context/ProfileContext";
 import { useEffect, useState } from "react";
+import logger from "@/utils/logger";
 
 export const useAvatarUpload = (isOpen: boolean, onClose: () => void) => {
   const { profile, uploadAvatar, removeAvatar } = useProfile();
@@ -42,7 +43,7 @@ export const useAvatarUpload = (isOpen: boolean, onClose: () => void) => {
       await uploadAvatar(selectedFile);
       onClose();
     } catch (error) {
-      console.error("Error uploading avatar:", error);
+      logger.error("Error uploading avatar:", { error });
     } finally {
       setIsUploading(false);
     }
@@ -55,7 +56,7 @@ export const useAvatarUpload = (isOpen: boolean, onClose: () => void) => {
       setPreviewUrl(undefined);
       onClose();
     } catch (error) {
-      console.error("Error removing avatar:", error);
+      logger.error("Error removing avatar:", { error });
     } finally {
       setIsUploading(false);
     }

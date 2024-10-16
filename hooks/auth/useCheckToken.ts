@@ -3,6 +3,7 @@ import authService from "@/services/authService";
 import { FormType } from "@/constants/Types";
 import { profileService } from "@/services/profileService";
 import { passwordService } from "@/services/passwordService";
+import logger from "@/utils/logger";
 
 export const useCheckToken = ({
   formType,
@@ -30,7 +31,7 @@ export const useCheckToken = ({
       const response = await checkService(token);
       setIsTokenValid(response.data);
     } catch (error: any) {
-      console.error(error);
+      logger.error(error);
       setError(error);
       setIsTokenValid(false);
     } finally {

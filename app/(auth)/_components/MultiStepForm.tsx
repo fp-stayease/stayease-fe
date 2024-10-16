@@ -45,11 +45,9 @@ const MultiStepForm: React.FC<MultiStepFormProps> = ({ userType, token }) => {
   ) => {
     if (step < (userType === "TENANT" ? 4 : 3)) {
       setStep(step + 1);
-      console.log("values: ", values);
       actions.setSubmitting(false);
     } else {
       await handleMultiStepSubmit(values, token, actions);
-      console.log("values: {}, token: {}", values, token);
     }
   };
 

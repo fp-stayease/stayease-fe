@@ -65,12 +65,6 @@ const RoomDetailsComponent: React.FC<RoomDetailsProps> = ({ room }) => {
   );
 
   const handleBookNow = useCallback(async () => {
-    console.log(
-      "Booking room:",
-      room.roomId,
-      "with booking values:",
-      bookingValues,
-    );
     await router.push(
       `/book?checkInDate=${bookingValues.checkInDate}&checkOutDate=${bookingValues.checkOutDate}&roomId=${room.roomId}&propertyId=${room.propertyId}&totalAdults=1`,
     );

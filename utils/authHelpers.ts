@@ -49,7 +49,7 @@ export async function handleJwtCallback({
     } else {
       Object.assign(token, mapUserToToken(user));
     }
-    console.log("Token: ", token);
+    logger.debug("Token: ", { token });
     return token;
   }
 

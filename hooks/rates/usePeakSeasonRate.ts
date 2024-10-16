@@ -40,7 +40,7 @@ export const usePeakSeasonRate = () => {
         return true;
       } catch (error: any) {
         setError(error || "An error occurred");
-        console.error(`Error: ${error}`);
+        logger.error(`Error: ${error}`);
         showAlert("error", errorMessage + error);
         return false;
       } finally {

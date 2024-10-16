@@ -42,7 +42,6 @@ export const authService = {
         config.endpoints.registration.checkToken,
         { token },
       );
-      console.log("Calling check token endpoint, token: ", token);
       return response.data;
     } catch (error: any) {
       logger.error("Error checking token", { error });
@@ -56,7 +55,6 @@ export const authService = {
       values,
       { params: { token }, headers: { "Content-Type": "application/json" } },
     );
-    console.log("Calling verify endpoint, response: ", response);
     return response.data;
   },
   login: async ({

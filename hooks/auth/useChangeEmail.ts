@@ -19,7 +19,6 @@ export const useChangeEmail = () => {
         "success",
         "Email change request sent successfully, please check your email to verify the change.",
       );
-      console.log("response:", response);
       return response;
     } catch (err: any) {
       handleError(

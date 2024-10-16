@@ -5,6 +5,7 @@ import rateService from "@/services/rateService";
 import { useFetchData } from "@/hooks/utils/useFetchData";
 import { useQueryClient } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
+import logger from "@/utils/logger";
 
 export const useAutoRateSetting = (propertyId: number) => {
   const [autoRateSetting, setAutoRateSetting] =
@@ -48,7 +49,7 @@ export const useAutoRateSetting = (propertyId: number) => {
         return true;
       } catch (error: any) {
         setError(error || "An error occurred");
-        console.error(`Error: ${error}`);
+        logger.error(`Error: ${error}`);
         showAlert("error", errorMessage + error);
         return false;
       } finally {
