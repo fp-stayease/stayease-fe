@@ -27,6 +27,7 @@ interface ComboboxProps {
   value?: string;
   className?: string;
   filterLabel?: boolean;
+  noResults?: string;
 }
 
 const Combobox: React.FC<ComboboxProps> = ({
@@ -36,6 +37,7 @@ const Combobox: React.FC<ComboboxProps> = ({
   value: externalValue,
   className,
   filterLabel,
+  noResults,
 }) => {
   const [open, setOpen] = useState(false);
   const [internalValue, setInternalValue] = useState(externalValue || "");
@@ -80,9 +82,13 @@ const Combobox: React.FC<ComboboxProps> = ({
       </PopoverTrigger>
       <PopoverContent className={`${className ? className : "w-[200px] p-0"}`}>
         <Command>
-          <CommandInput placeholder="Search choice..." className="h-9" />
+          <CommandInput placeholder={placeholder} className="h-9" />
           <CommandList>
-            <CommandEmpty>No choice found.</CommandEmpty>
+            <CommandEmpty>
+              <p className="text-gray-500 text-sm">
+                {noResults ?? `No options found.`}
+              </p>
+            </CommandEmpty>
             <CommandGroup>
               {(filterLabel ? filterChoices(choices, "") : choices).map(
                 (choice) => (
