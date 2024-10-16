@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { addDays, endOfDay, format, startOfDay } from "date-fns";
 import rateService from "@/services/rateService";
+import logger from "@/utils/logger";
 
 export const usePriceCalendar = (
   propertyId: number,
@@ -49,7 +50,7 @@ export const usePriceCalendar = (
         }
         return result || [];
       } catch (error) {
-        console.error("Error fetching availability data:", error);
+        logger.error("Error fetching availability data:", { error });
         return [];
       }
     },

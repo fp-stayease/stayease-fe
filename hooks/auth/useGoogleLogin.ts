@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { signIn as nextAuthSignIn, useSession } from "next-auth/react";
 import { useAlert } from "@/context/AlertContext";
+import logger from "@/utils/logger";
 
 export function useGoogleLogin() {
   const [error, setError] = useState<Error | null>(null);
@@ -25,7 +26,7 @@ export function useGoogleLogin() {
         showAlert("info", "Redirecting to consent page...");
       }
     } catch (error: any) {
-      console.error("Google login failed:", error);
+      logger.error("Google login failed:", error);
       showAlert("error", "Google login failed. " + error);
       setError(error);
     } finally {

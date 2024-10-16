@@ -4,6 +4,7 @@ import { FormikHelpers } from "formik";
 import propertyService from "@/services/propertyService";
 import { useAlert } from "@/context/AlertContext";
 import { useQueryClient } from "@tanstack/react-query";
+import logger from "@/utils/logger";
 
 interface Category {
   id: number;
@@ -66,7 +67,7 @@ export const usePropertyCreation = () => {
       await queryClient.invalidateQueries();
     } catch (error) {
       setError("Failed to create property and rooms");
-      console.error("Error submitting form:", error);
+      logger.error("Error submitting form:", { error });
       formikHelpers.setSubmitting(false);
       showAlert(
         "error",
@@ -95,7 +96,7 @@ const createRooms = async (propertyId: number, rooms: FormValues["rooms"]) => {
     try {
       await propertyService.createRoom(propertyId, room);
     } catch (error) {
-      console.error(`Error creating room:`, error);
+      logger.error(`Error creating room:`, { error });
       throw new Error(`Failed to create room: ${room.name}`);
     }
   }

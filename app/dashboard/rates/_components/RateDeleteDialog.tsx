@@ -15,6 +15,7 @@ import React, { FC, useEffect, useState } from "react";
 import { usePeakSeasonRate } from "@/hooks/rates/usePeakSeasonRate";
 import { useAutoRateSetting } from "@/hooks/rates/useAutoRateSetting";
 import LoadingButton from "@/components/LoadingButton";
+import logger from "@/utils/logger";
 
 interface DeleteDialogProps {
   propertyId?: number;
@@ -50,10 +51,9 @@ const RateDeleteDialog: FC<DeleteDialogProps> = ({
         onConfirm();
       }
     } catch (error) {
-      console.error(
-        "Error deleting rate or deactivating auto rate setting:",
+      logger.error("Error deleting rate or deactivating auto rate setting:", {
         error,
-      );
+      });
     }
   };
 

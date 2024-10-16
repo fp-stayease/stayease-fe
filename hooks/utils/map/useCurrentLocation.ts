@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef } from "react";
+import logger from "@/utils/logger";
 
 interface CurrentLocationConfig {
   onLocationChange: (location: google.maps.LatLngLiteral) => void;
@@ -26,13 +27,13 @@ export const useCurrentLocation = ({
           initialLocationSet.current = true;
         },
         () => {
-          console.error("Error: The Geolocation service failed.");
+          logger.error("Error: The Geolocation service failed.");
           initialLocationSet.current = true;
         },
       );
     } else if (!navigator.geolocation) {
       // If the browser doesn't support geolocation
-      console.error("Error: Your browser doesn't support geolocation.");
+      logger.error("Error: Your browser doesn't support geolocation.");
       initialLocationSet.current = true;
     }
   }, [onLocationChange]);

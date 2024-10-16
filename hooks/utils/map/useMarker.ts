@@ -74,7 +74,7 @@ export const useMarker = ({
     ) {
       updateMarkerAndMap({ lat: position.lat, lng: position.lng });
     } else {
-      console.error("Marker position is null or undefined");
+      logger.error("Marker position is null or undefined");
     }
   };
 
