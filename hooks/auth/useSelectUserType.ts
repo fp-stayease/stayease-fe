@@ -52,7 +52,6 @@ export const useSelectUserType = () => {
             values.userType === "TENANT" ? values.businessName : undefined,
           taxId: values.userType === "TENANT" ? values.taxId : undefined,
         });
-        console.log("Session: ", session);
 
         await update({
           ...session,
@@ -76,8 +75,6 @@ export const useSelectUserType = () => {
         });
 
         await update();
-
-        console.log("Updated session: ", session);
 
         showAlert("success", "Registration successful! Please sign in again.");
         setTimeout(() => {

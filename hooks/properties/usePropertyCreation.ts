@@ -57,7 +57,6 @@ export const usePropertyCreation = () => {
       const newPropertyId = await createProperty(propertyData);
       await createRooms(newPropertyId, values.rooms);
 
-      console.log("Property and rooms created successfully");
       formikHelpers.setSubmitting(false);
       showAlert(
         "success",
@@ -88,7 +87,6 @@ export const usePropertyCreation = () => {
 
 const createProperty = async (propertyData: FormValues["property"]) => {
   const propertyResponse = await propertyService.createProperty(propertyData);
-  console.log("Property created successfully:", propertyResponse);
   return propertyResponse.id;
 };
 
@@ -96,7 +94,6 @@ const createRooms = async (propertyId: number, rooms: FormValues["rooms"]) => {
   for (const room of rooms) {
     try {
       await propertyService.createRoom(propertyId, room);
-      console.log("Room created successfully:", room);
     } catch (error) {
       console.error(`Error creating room:`, error);
       throw new Error(`Failed to create room: ${room.name}`);
