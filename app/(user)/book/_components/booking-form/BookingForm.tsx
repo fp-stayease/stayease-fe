@@ -18,6 +18,7 @@ import CancellationPolicy from "@/app/(user)/book/_components/booking-form/Cance
 import ListLoading from "@/components/ListLoading";
 import {useQueryClient} from "@tanstack/react-query";
 import {Loader2} from "lucide-react";
+import {format} from "date-fns";
 
 interface BookingFormProps {
     checkInDate: string;
@@ -30,6 +31,8 @@ const BookingForm: FC<BookingFormProps> = ({checkInDate, checkOutDate, roomId, p
     const router = useRouter();
     const queryClient = useQueryClient();
     const [loading, setLoading] = useState<boolean>(false);
+
+    const now = new Date();
 
     const {bookingValues} = useBookingValues();
     const {roomPrice, isAvailable, isLoading, error} =
@@ -79,7 +82,7 @@ const BookingForm: FC<BookingFormProps> = ({checkInDate, checkOutDate, roomId, p
             };
 
             const expiryTimeInfo = {
-                order_time: new Date(),
+                order_time: format(now, "yyyy-MM-dd HH:mm:ss xxxx"),
                 expiry_duration: 30,
                 unit: "minute",
             };
