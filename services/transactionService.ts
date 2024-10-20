@@ -26,7 +26,7 @@ export const transactionService = {
     },
     tenantRejectTrx: async (bookingId: string, token?: string) => {
         try {
-            const { data } = await axiosInterceptor.patch(`${config.endpoints.transactions.tenant}/${bookingId}`, {}, {
+            const { data } = await axiosInterceptor.put(`${config.endpoints.transactions.tenant}/${bookingId}`, {}, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             return data;
