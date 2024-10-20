@@ -13,6 +13,7 @@ import {Button} from "@/components/ui/button";
 import {transactionService} from "@/services/transactionService";
 import {useQueryClient} from "@tanstack/react-query";
 import {usePathname} from "next/navigation";
+import {useAlert} from "@/context/AlertContext";
 
 interface CancelBookingDialogProps {
     bookingId: string;
@@ -22,6 +23,7 @@ interface CancelBookingDialogProps {
 const CancelBookingDialog: FC<CancelBookingDialogProps> = ({ bookingId, queryKey }) => {
     const queryClient = useQueryClient();
     const pathname = usePathname();
+    const { showAlert } = useAlert();
 
     const handleCancel = async () => {
         try {
@@ -30,9 +32,10 @@ const CancelBookingDialog: FC<CancelBookingDialogProps> = ({ bookingId, queryKey
             } else {
                 await transactionService.userCancelTrx(bookingId);
             }
+            showAlert("success", "Booking cancelled");
             await queryClient.invalidateQueries({queryKey: [queryKey]})
         } catch (error) {
-            console.log(error);
+            showAlert("error", "Something went wrong, please try again");
         }
     };
     return (

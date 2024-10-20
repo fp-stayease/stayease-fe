@@ -19,6 +19,7 @@ import ListLoading from "@/components/ListLoading";
 import {useQueryClient} from "@tanstack/react-query";
 import {Loader2} from "lucide-react";
 import {format} from "date-fns";
+import {useAlert} from "@/context/AlertContext";
 
 interface BookingFormProps {
     checkInDate: string;
@@ -31,6 +32,7 @@ const BookingForm: FC<BookingFormProps> = ({checkInDate, checkOutDate, roomId, p
     const router = useRouter();
     const queryClient = useQueryClient();
     const [loading, setLoading] = useState<boolean>(false);
+    const { showAlert } = useAlert();
 
     const now = new Date();
 
@@ -111,7 +113,7 @@ const BookingForm: FC<BookingFormProps> = ({checkInDate, checkOutDate, roomId, p
             router.push(`/payment?id=${data.bookingId}`);
             await queryClient.invalidateQueries({queryKey: ['get-user-bookings', 'get-payment-info', 'get-tenant-bookings']});
         } catch (error) {
-            console.log(error);
+            showAlert("error", "Something went wrong, please try again");
         } finally {
             setLoading(false);
         }
@@ -135,7 +137,6 @@ const BookingForm: FC<BookingFormProps> = ({checkInDate, checkOutDate, roomId, p
                         <Button
                             type="submit"
                             className="bg-blue-950 text-white"
-                            onClick={() => console.log("Button clicked")}
                             disabled={loading}
                         >
                             {loading && <Loader2 className="w-4 h-4 animate-spin" />} Pay and Continue

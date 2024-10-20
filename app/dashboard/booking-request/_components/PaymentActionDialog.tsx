@@ -11,6 +11,7 @@ import {
 import { Button } from '@/components/ui/button';
 import {transactionService} from "@/services/transactionService";
 import {useQueryClient} from "@tanstack/react-query";
+import {useAlert} from "@/context/AlertContext";
 
 interface PaymentActionDialogProps {
     bookingId: string;
@@ -19,16 +20,19 @@ interface PaymentActionDialogProps {
 
 const PaymentActionDialog: FC<PaymentActionDialogProps> = ({ bookingId, isApproval }) => {
     const client = useQueryClient();
+    const { showAlert } = useAlert();
     const handleAction = async () => {
         try {
             if (isApproval) {
                 await transactionService.tenantApproveTrx(bookingId);
+                showAlert("success", "Booking approved");
             } else {
                 await transactionService.tenantRejectTrx(bookingId);
+                showAlert("success", "Booking rejected");
             }
             await client.invalidateQueries({queryKey: ["get-tenant-bookings"]});
         } catch (error) {
-            console.log(error);
+            showAlert("error", "Something went wrong, please try again");
         }
     };
 

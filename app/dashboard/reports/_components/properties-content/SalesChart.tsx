@@ -14,8 +14,6 @@ const SalesChart = () => {
         dailySalesError
     } = useDailySales(reportParams);
 
-    console.log(reportParams.month)
-
     if (dailySalesIsLoading) return <ListLoading/>
     if (dailySalesError) return <>Something went wrong</>
     if (!dailySales) return <p className="text-gray-500">No data available</p>

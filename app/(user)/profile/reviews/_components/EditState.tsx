@@ -31,10 +31,9 @@ const EditState: FC<EditStateProps> = ({ rating, comment, reviewId }) => {
     const handleEditReview = async (value: FormikValues) => {
         setLoading(true);
         try {
-            const response = await reviewService.createUserReview(reviewId, value);
-            console.log(response);
+            await reviewService.createUserReview(reviewId, value);
         } catch (error) {
-            console.log(error);
+            console.error(error);
         } finally {
             setLoading(false);
         }

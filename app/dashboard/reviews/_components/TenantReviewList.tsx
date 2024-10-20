@@ -19,8 +19,6 @@ const TenantReviewList = () => {
         isFetchingNextPage
     } = useTenantReviews(reviewParams);
 
-    console.log(tenantReviews);
-
     if (isLoading) return <ListLoading />
 
     if (error) return <>Something went wrong</>;

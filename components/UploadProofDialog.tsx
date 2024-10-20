@@ -14,6 +14,7 @@ import { Button } from "@/components/ui/button";
 import { useRouter, useSearchParams } from "next/navigation";
 import { paymentService } from "@/services/paymentService";
 import ImageDropZone from "@/components/ImageDropZone";
+import {useAlert} from "@/context/AlertContext";
 
 interface UploadProofDialogProps {
   bookingId?: string;
@@ -28,6 +29,7 @@ const UploadProofDialog: FC<UploadProofDialogProps> = ({
   const [bookingId, setBookingId] = useState<string | null>(
     propBookingId || null,
   );
+  const { showAlert } = useAlert();
 
   useEffect(() => {
     if (!propBookingId) {
@@ -57,10 +59,10 @@ const UploadProofDialog: FC<UploadProofDialogProps> = ({
 
     try {
       await paymentService.uploadPayment(bookingId, formData);
-      console.log("File uploaded successfully");
+      showAlert("success", "Your payment proof successfully uploaded");
       router.push("/profile/bookings");
     } catch (error) {
-      console.error("Error uploading file:", error);
+      showAlert("error", "Upload failed. Please try again");
     }
   };
 
